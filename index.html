@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>眞 인파이터 스킬 도감 & 콤보 프리셋</title>
+<style>
+:root{
+  --bg:#0e1116;--panel:#151a22;--panel2:#101722;--text:#e8edf5;--muted:#9aa8bb;--line:#2a3443;
+  --accent:#6ee7b7;--accent2:#60a5fa;--chip:#243044;--danger:#ef4444;--green:#16a34a;--gold:#f5c542;
+  --shadow:0 22px 80px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;background:linear-gradient(180deg,#0c1018,#10141b 260px,#0e1116);color:var(--text);overflow-y:auto}
+button,input,textarea{font-family:inherit}
+button{border:1px solid var(--line);background:#111827;color:var(--text);border-radius:12px;padding:10px 12px;cursor:pointer}
+button:hover{border-color:var(--accent2)}
+.hidden{display:none!important}
+.hero{padding:34px 28px 16px;max-width:1280px;margin:0 auto}
+.hero h1{margin:0;font-size:34px;letter-spacing:-.04em}
+.hero p{color:var(--muted);margin:12px 0 0;line-height:1.65}
+.mode-tabs{max-width:1280px;margin:0 auto 18px;padding:0 28px;display:flex;gap:10px;align-items:center;position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(12,16,24,.98),rgba(12,16,24,.82));backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.05)}
+.mode-tab{padding:12px 18px;border-radius:999px;font-size:15px;font-weight:800;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.mode-tab.active{background:linear-gradient(135deg,#2563eb,#0891b2);border-color:transparent;color:#fff;box-shadow:0 0 0 3px rgba(96,165,250,.12)}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 16px;min-width:130px}
+.stat b{display:block;font-size:22px}
+.stat span{color:var(--muted);font-size:13px}
+.layout{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:18px;padding:0 28px 44px}
+.sidebar{position:sticky;top:74px;align-self:start;background:rgba(21,26,34,.88);border:1px solid var(--line);border-radius:18px;padding:16px;backdrop-filter:blur(8px);max-height:calc(100vh - 92px);overflow:auto}
+.sidebar h2{margin:0 0 10px;font-size:16px}
+.input{width:100%;background:#0c1119;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none}
+.input:focus, textarea:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(96,165,250,.13)}
+.small-label{color:var(--muted);font-size:12px;margin:16px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--text);border-radius:999px;padding:7px 10px;font-size:12px;cursor:pointer;user-select:none}
+.chip.active{background:linear-gradient(135deg,#2563eb,#0891b2);border-color:transparent}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.group{margin-bottom:18px}
+.group-title{display:flex;align-items:end;justify-content:space-between;margin:0 0 10px;padding:0 3px}
+.group-title h2{margin:0;font-size:22px}
+.group-title span{color:var(--muted);font-size:13px}
+.cards{display:grid;gap:12px}
+.card{background:rgba(21,26,34,.93);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.card-head{display:flex;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.head-left{display:flex;gap:14px;align-items:center;min-width:0}
+.skill-icon{width:56px;height:56px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#070a10;object-fit:cover;box-shadow:0 0 0 2px rgba(0,0,0,.18)}
+.name{font-size:18px;font-weight:800;letter-spacing:-.03em;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.num{color:var(--accent);font-size:15px}
+.badge{font-size:13px;font-weight:800;color:#0b1120;background:#75f0b8;border-radius:999px;padding:4px 8px}
+.badge.passive{background:#84cc16;color:#061004}
+.meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;color:var(--muted);font-size:13px}
+.rate{display:flex;gap:10px;flex-wrap:wrap;align-items:start;justify-content:end;color:var(--muted);font-size:12px;min-width:140px}
+.rate div{background:#0d1420;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:8px 10px}
+.rate b{display:block;color:#93c5fd;font-size:15px;margin-top:2px}
+.card-body{padding:14px 16px 16px}
+.tagline{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}
+.tag{display:inline-flex;align-items:center;border:1px solid #244b7e;background:#0b1e39;color:#dbeafe;border-radius:999px;padding:7px 12px;font-size:14px;font-weight:800;line-height:1}
+.section-block{margin-top:13px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px}
+.section-title{color:var(--accent);font-weight:900;margin-bottom:8px}
+.line{line-height:1.7;color:#e5edf7}
+.line.bullet{padding-left:10px;color:#d1e7ff}
+.line.bracket{color:#facc15;font-weight:800;margin-top:4px}
+.line.empty{color:var(--muted)}
+.no-result{display:none;text-align:center;color:var(--muted);padding:30px;background:rgba(21,26,34,.7);border:1px dashed var(--line);border-radius:18px}
+/* Combo mode */
+.combo-wrap{max-width:1280px;margin:0 auto;padding:0 28px 60px}
+.combo-panel{background:rgba(21,26,34,.93);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
+.combo-panel-head{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.combo-panel-head h2{margin:0;font-size:22px;letter-spacing:-.04em}
+.combo-panel-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.palette{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(7,10,16,.35)}
+.palette-top{display:grid;grid-template-columns:1fr 210px 240px;gap:10px;align-items:center;margin-bottom:14px}
+.palette-title{font-weight:900;color:#eaf2ff}
+.combo-input{width:100%;background:#0c1119;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none}
+.tag-filter-wrap{position:relative}
+.tag-filter-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 13px;background:#0c1119;border:1px solid var(--line);border-radius:12px;color:var(--text)}
+.tag-filter-menu{display:none;position:absolute;right:0;top:calc(100% + 8px);width:280px;max-height:360px;overflow:auto;background:#101722;border:1px solid var(--line);border-radius:14px;padding:10px;z-index:80;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.tag-filter-menu.open{display:block}
+.check-row{display:flex;align-items:center;gap:8px;padding:8px 6px;border-radius:10px;color:#dbeafe;cursor:pointer}
+.check-row:hover{background:rgba(255,255,255,.06)}
+.check-row input{accent-color:#22c55e}
+.palette-list{display:flex;gap:10px;overflow:auto;padding:4px 0 10px;min-height:76px;scrollbar-width:thin;scrollbar-color:#334155 #080d15}
+.palette-skill{width:62px;min-width:62px;display:grid;place-items:center;gap:6px;cursor:grab}
+.palette-skill img{width:52px;height:52px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#05070b;object-fit:cover}
+.palette-skill small{width:100%;color:#a8b5c8;font-size:10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.combo-editor{padding:18px}
+.editor-tip{color:var(--muted);font-size:13px;margin:0 0 12px}
+.timeline-shell{position:relative;background:#0c1119;border:1px solid var(--line);border-radius:18px;overflow:auto;min-height:240px;scrollbar-width:thin;scrollbar-color:#38bdf8 #080d15;scrollbar-gutter:stable}
+.timeline-inner{position:relative;min-width:100%;padding:20px 74px 24px 18px}
+.bar-lane{position:relative;height:56px;min-width:860px;border-bottom:1px dashed rgba(255,255,255,.12);margin-bottom:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0,rgba(255,255,255,.035) 1px,transparent 1px,transparent 76px)}
+.add-bar-btn,.delete-bar-btn{position:absolute;top:18px;width:46px;height:46px;border-radius:50%;font-size:0;line-height:0;display:grid;place-items:center;padding:0;background:#151a22;border:1px solid #3a4556;z-index:10}
+.add-bar-btn{right:74px}
+.delete-bar-btn{right:18px}
+.add-bar-btn::before,.delete-bar-btn::before{display:block;font-size:26px;font-weight:500;line-height:1;color:#fff;transform:translateY(3px)}
+.add-bar-btn::before{content:'+'}
+.delete-bar-btn::before{content:'−'}
+.delete-bar-btn.active{background:#3a1118;border-color:#ef4444;box-shadow:0 0 0 2px rgba(239,68,68,.22)}
+.color-pop{display:none;position:absolute;right:74px;top:68px;width:240px;background:#101722;border:1px solid var(--line);border-radius:16px;padding:12px;z-index:20;box-shadow:0 18px 60px rgba(0,0,0,.4)}
+.color-pop.open{display:block}
+.color-pop-title{font-size:12px;color:var(--muted);margin-bottom:8px}
+.color-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.color-swatch{height:28px;border-radius:10px;border:1px solid rgba(255,255,255,.22);cursor:pointer}
+.note-bar{position:absolute;top:11px;height:32px;border-radius:10px;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 25px rgba(0,0,0,.26);display:block;color:#fff;font-weight:900;font-size:12px;white-space:nowrap;overflow:visible;cursor:move;user-select:none;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.note-bar .handle{position:absolute;top:0;width:9px;height:100%;background:rgba(255,255,255,.28);cursor:ew-resize}
+.note-bar .left-h{left:0;border-radius:10px 0 0 10px}
+.note-bar .right-h{right:0;border-radius:0 10px 10px 0}
+.note-bar .bar-text{position:absolute;top:50%;transform:translate(-50%,-50%);height:22px;line-height:22px;padding:0 7px;border-radius:8px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.75);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;z-index:3;transition:left .14s ease, top .14s ease, background .14s ease, box-shadow .14s ease}
+.note-bar .bar-delete-x{display:none;position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);border-radius:50%;background:#ef4444;color:#fff;border:2px solid rgba(255,255,255,.9);font-size:15px;font-weight:900;line-height:1;text-align:center;cursor:pointer;z-index:5;box-shadow:0 6px 18px rgba(0,0,0,.35);padding:0;align-items:center;justify-content:center}
+.bar-delete-mode .note-bar:hover{background:#05070b!important;border-color:#ef4444!important;box-shadow:0 0 0 2px rgba(239,68,68,.25),0 8px 25px rgba(0,0,0,.34)}
+.bar-delete-mode .note-bar:hover .bar-delete-x{display:flex}
+.bar-delete-mode .note-bar:hover .bar-text{opacity:.25}
+.bar-delete-mode .note-bar .handle{display:none}
+.combo-track{display:flex;align-items:flex-start;gap:14px;min-height:112px;min-width:860px;padding:8px 0 10px}
+.empty-combo{color:#728097;border:1px dashed #354155;border-radius:16px;padding:28px 22px;min-width:400px;text-align:center}
+.combo-item{width:68px;min-width:68px;position:relative;text-align:center;cursor:grab}
+.combo-item.dragging{opacity:.45;filter:saturate(.65)}
+.combo-item.drop-before::before,.combo-item.drop-after::after{content:'';position:absolute;top:28px;width:3px;height:64px;border-radius:999px;background:#38bdf8;box-shadow:0 0 16px rgba(56,189,248,.75)}
+.combo-item.drop-before::before{left:-8px}
+.combo-item.drop-after::after{right:-8px}
+.key-badge{min-height:24px;max-width:66px;margin:0 auto 6px;background:#172337;border:1px solid #31527f;color:#e0f2fe;border-radius:10px;padding:4px 6px;font-size:12px;font-weight:900;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text}
+.key-badge.empty{color:#71829c;border-style:dashed}
+.key-badge.editing{background:#facc15;color:#111827;border-color:#fde68a;box-shadow:0 0 0 2px rgba(250,204,21,.25)}
+.key-badge.editing::after{content:'|';margin-left:2px;animation:caretBlink 1s step-end infinite}
+@keyframes caretBlink{50%{opacity:0}}
+.combo-item img{width:58px;height:58px;border-radius:12px;background:#05070b;border:1px solid rgba(255,255,255,.18);object-fit:cover;box-shadow:0 0 0 2px rgba(0,0,0,.28)}
+.combo-item img.combo-skill-icon{cursor:help}
+.combo-item .remove-item{position:absolute;top:23px;right:0;width:18px;height:18px;border-radius:50%;background:#ef4444;color:#fff;font-size:12px;line-height:18px;display:none;cursor:pointer}
+.combo-item:hover .remove-item{display:block}
+.combo-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.save-main-btn{background:linear-gradient(135deg,#10b981,#2563eb);border-color:transparent;color:#fff;font-weight:900;padding:12px 18px}
+.clear-btn{background:#141c2a}
+.skill-tooltip{position:fixed;display:none;z-index:1000;min-width:250px;max-width:320px;background:#1d1d28;border:1px solid #363848;border-radius:16px;box-shadow:0 22px 70px rgba(0,0,0,.48);padding:14px}
+.skill-tooltip.open{display:block}
+.tooltip-title{font-size:16px;font-weight:900;margin-bottom:10px;color:#fff}
+.tooltip-tags{display:grid;gap:7px;margin-bottom:12px}
+.tooltip-tag{display:block;width:100%;border-radius:8px;background:#333340;color:#fff;padding:7px 10px;text-align:center;font-weight:900;font-size:12px}
+.tooltip-tag.aggressive{background:#dc2626}
+.tooltip-tag.move{background:#16a34a}
+.memo-placeholder{color:#aeb9c8;font-size:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:10px}
+.memo-area{display:none;width:100%;min-height:74px;background:#111827;color:#eaf2ff;border:1px solid #38475d;border-radius:12px;padding:9px;resize:vertical;outline:none}
+.memo-area.open{display:block}
+
+/* Dark custom scrollbars */
+.timeline-shell::-webkit-scrollbar,
+.palette-list::-webkit-scrollbar,
+.preset-preview::-webkit-scrollbar,
+.preset-code::-webkit-scrollbar{height:12px;width:12px}
+.timeline-shell::-webkit-scrollbar-track,
+.palette-list::-webkit-scrollbar-track,
+.preset-preview::-webkit-scrollbar-track,
+.preset-code::-webkit-scrollbar-track{background:#08101b;border-radius:999px;border:1px solid #162234}
+.timeline-shell::-webkit-scrollbar-thumb,
+.palette-list::-webkit-scrollbar-thumb,
+.preset-preview::-webkit-scrollbar-thumb,
+.preset-code::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#1f6f8b,#22c7dc);border-radius:999px;border:3px solid #08101b}
+.timeline-shell::-webkit-scrollbar-thumb:hover,
+.palette-list::-webkit-scrollbar-thumb:hover,
+.preset-preview::-webkit-scrollbar-thumb:hover,
+.preset-code::-webkit-scrollbar-thumb:hover{background:linear-gradient(90deg,#2dd4bf,#60a5fa)}
+.timeline-shell::-webkit-scrollbar-corner,
+.palette-list::-webkit-scrollbar-corner,
+.preset-preview::-webkit-scrollbar-corner,
+.preset-code::-webkit-scrollbar-corner{background:#08101b}
+
+ .saved-list{padding:20px;max-height:none;overflow:visible}
+.saved-list h2{margin:0 0 14px;font-size:22px}
+.preset-grid{display:flex;flex-direction:column;gap:14px}
+.preset-card{width:100%;background:rgba(12,17,25,.86);border:1px solid var(--line);border-radius:18px;padding:16px;transition:border-color .18s ease,background .18s ease}
+.preset-card.expanded{background:rgba(13,20,31,.94);border-color:#31527f}
+.preset-head{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:10px}
+.preset-name{font-size:18px;font-weight:900;line-height:1.3}
+.preset-code{color:#aab7c8;font-size:12px;line-height:1.5;background:rgba(255,255,255,.045);border-radius:10px;padding:8px;margin:9px 0;white-space:pre-wrap;max-height:80px;overflow:auto}
+.preset-card.expanded .preset-code{max-height:180px}
+.preset-preview{display:flex;gap:8px;overflow:auto;padding:10px 0 10px;max-width:100%;scrollbar-width:thin;scrollbar-color:#38bdf8 #080d15}
+.preset-card.expanded .preset-preview{display:none}
+.preset-preview .mini{position:relative;width:46px;min-width:46px;padding-top:10px}
+.preset-preview img{width:42px;height:42px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#05070b;object-fit:cover}
+.preset-preview .mini-key{position:absolute;left:0;top:0;background:#172337;color:#e0f2fe;border:1px solid #31527f;border-radius:7px;font-size:9px;font-weight:900;padding:1px 4px;max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preset-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+.preset-actions button{padding:8px 10px;font-size:12px}
+.detail-btn{background:#0b1e39;border-color:#244b7e;color:#dbeafe}
+.preset-detail{margin-top:12px;border:1px solid rgba(255,255,255,.08);background:#0a0f17;border-radius:16px;padding:12px}
+.preset-detail-shell{overflow:auto;border-radius:12px;scrollbar-width:thin;scrollbar-color:#38bdf8 #080d15}
+.preset-detail-inner{position:relative;min-height:154px;padding:8px 18px 14px 18px}
+.preset-detail-bars{position:relative;height:48px;border-bottom:1px dashed rgba(255,255,255,.11);margin-bottom:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.032) 0,rgba(255,255,255,.032) 1px,transparent 1px,transparent 76px)}
+.saved-note-bar{position:absolute;top:8px;height:30px;border-radius:10px;border:1px solid rgba(255,255,255,.24);display:block;color:#fff;font-weight:900;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,.75);white-space:nowrap;overflow:visible}.saved-note-text{position:absolute;top:50%;transform:translate(-50%,-50%);height:22px;line-height:22px;padding:0 7px;border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.saved-note-text.is-floating,.note-bar .bar-text.is-floating,.bar-edit-input.is-floating{top:-14px;background:rgba(5,7,11,.76);border:1px solid rgba(255,255,255,.28);box-shadow:0 6px 18px rgba(0,0,0,.32);z-index:15}
+.preset-detail-track{display:flex;gap:14px;align-items:flex-start;min-height:82px}
+.preset-detail-item{position:relative;width:68px;min-width:68px;text-align:center;padding-top:30px}
+.preset-detail-key{position:absolute;left:50%;top:0;transform:translateX(-50%);min-width:48px;max-width:76px;background:#172337;color:#e0f2fe;border:1px solid #31527f;border-radius:10px;padding:4px 6px;font-size:11px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preset-detail-item img{width:52px;height:52px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#05070b;object-fit:cover}
+.saved-skill-icon{cursor:help}
+.saved-memo{margin-top:8px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px;color:#dbeafe;line-height:1.5;white-space:pre-wrap}
+.delete-btn{background:#2a1218;border-color:#61313c;color:#fecdd3}
+.empty-list{color:var(--muted);padding:20px;border:1px dashed var(--line);border-radius:16px;text-align:center}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;z-index:900;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal{width:min(460px,100%);background:#151a22;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px}
+.modal h3{margin:0 0 16px;font-size:22px}
+.modal label{display:block;color:#dbe7f6;font-weight:800;margin:12px 0 7px}
+.modal textarea{min-height:120px;resize:vertical}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.modal-save{background:linear-gradient(135deg,#10b981,#2563eb);border-color:transparent;color:#fff;font-weight:900}
+
+.palette-list::-webkit-scrollbar,.timeline-shell::-webkit-scrollbar,.preset-preview::-webkit-scrollbar,.preset-detail-shell::-webkit-scrollbar,.tag-filter-menu::-webkit-scrollbar{height:12px;width:12px}
+.palette-list::-webkit-scrollbar-track,.timeline-shell::-webkit-scrollbar-track,.preset-preview::-webkit-scrollbar-track,.preset-detail-shell::-webkit-scrollbar-track,.tag-filter-menu::-webkit-scrollbar-track{background:#080d15;border-radius:999px;border:1px solid rgba(255,255,255,.05)}
+.palette-list::-webkit-scrollbar-thumb,.timeline-shell::-webkit-scrollbar-thumb,.preset-preview::-webkit-scrollbar-thumb,.preset-detail-shell::-webkit-scrollbar-thumb,.tag-filter-menu::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#1e293b,#38bdf8,#22c55e);border-radius:999px;border:3px solid #080d15}
+.palette-list::-webkit-scrollbar-thumb:hover,.timeline-shell::-webkit-scrollbar-thumb:hover,.preset-preview::-webkit-scrollbar-thumb:hover,.preset-detail-shell::-webkit-scrollbar-thumb:hover,.tag-filter-menu::-webkit-scrollbar-thumb:hover{background:linear-gradient(90deg,#334155,#67e8f9,#4ade80)}
+
+
+.job-title-wrap{position:relative;display:inline-block;vertical-align:baseline}
+.job-select-btn{display:inline-flex;align-items:center;gap:8px;padding:0 4px 2px 0;border:0;background:transparent;color:var(--text);font-size:inherit;font-weight:inherit;letter-spacing:inherit;border-radius:10px;line-height:1.1}
+.job-select-btn:hover{color:#dbeafe;text-shadow:0 0 18px rgba(96,165,250,.35)}
+.job-caret{font-size:18px;color:#93c5fd;transform:translateY(2px)}
+.job-menu{display:none;position:absolute;left:0;top:calc(100% + 10px);width:230px;padding:8px;background:#101722;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.5);z-index:200}
+.job-menu.open{display:grid;gap:6px}
+.job-menu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:#0c1119;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px}
+.job-menu button:hover,.job-menu button.active{border-color:#60a5fa;background:#102038}
+.job-menu span{color:var(--muted);font-size:12px}
+.job-menu b{font-size:14px;color:#eef6ff}
+.bar-edit-input{position:absolute;top:50%;transform:translate(-50%,-50%);height:24px;border:1px solid rgba(255,255,255,.45);background:rgba(5,7,11,.72);color:#fff;border-radius:8px;padding:0 8px;font-weight:900;font-size:12px;text-align:center;outline:none;box-shadow:0 0 0 2px rgba(255,255,255,.1);z-index:16}
+.note-bar .bar-text{cursor:text;user-select:text}
+.note-bar .bar-text:hover{text-decoration:underline;text-underline-offset:2px}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:relative;top:auto;max-height:none}.palette-top{grid-template-columns:1fr}.hero h1{font-size:26px}.card-head{flex-direction:column}.rate{justify-content:start}.combo-wrap,.layout,.hero,.mode-tabs{padding-left:16px;padding-right:16px}}
+@media print{.sidebar,.mode-tabs,.combo-panel,.combo-wrap{display:none!important}body{background:#fff;color:#000}.layout{display:block;max-width:none}.card{break-inside:avoid;background:#fff;color:#000;border-color:#ccc}.section-block{background:#fff}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1><span class="job-title-wrap"><button id="jobSelectBtn" class="job-select-btn" type="button"><span id="jobLabel">眞 인파이터</span><span class="job-caret">▾</span></button><div id="jobMenu" class="job-menu"><button type="button" data-job-option="infighter"><span>프리스트(여)</span><b>眞 인파이터</b></button><button type="button" data-job-option="breaker"><span>제국기사</span><b>眞 브레이커</b></button></div></span><span class="title-rest"> 스킬 도감 & 콤보 프리셋</span></h1>
+  <p>스킬 설명은 도감 모드에서 확인하고, 콤보 프리셋 모드에서는 스킬 아이콘을 조합해 입력키와 구간 메모를 기록할 수 있습니다.</p>
+  <div class="stats"><div class="stat"><b id="statSkillCount">42</b><span>스킬 수</span></div><div class="stat"><b id="statGroupCount">12</b><span>레벨 구간</span></div><div class="stat"><b>프리셋</b><span>직업별 로컬 저장</span></div></div>
+</div>
+<nav class="mode-tabs">
+  <button class="mode-tab active" data-mode="catalog">도감 모드</button>
+  <button class="mode-tab" data-mode="combo">콤보 프리셋 모드</button>
+</nav>
+<main id="catalogMode" class="mode-view">
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>검색 / 필터</h2>
+      <input id="search" class="input" placeholder="스킬명, 태그, 설명 검색">
+      <div class="small-label">레벨 구간</div>
+      <div id="groupChips" class="chips"></div>
+      <div class="small-label">기능 태그</div>
+      <div id="tagChips" class="chips"></div>
+      <div class="btns"><button id="reset">초기화</button><button onclick="window.print()">인쇄/PDF</button></div>
+    </aside>
+    <section id="content"></section>
+  </div>
+</main>
+<main id="comboMode" class="mode-view hidden">
+  <div class="combo-wrap">
+    <section class="combo-panel">
+      <div class="combo-panel-head">
+        <div><h2>콤보 프리셋 제작</h2><p>스킬명을 검색하거나 기능 태그를 골라 스킬 아이콘을 찾은 뒤, 아래 콤보 라인으로 드래그하세요.</p></div>
+        <button id="clearCombo" class="clear-btn">현재 제작 영역 비우기</button>
+      </div>
+      <div class="palette">
+        <div class="palette-top">
+          <div class="palette-title">스킬 아이콘 목록</div>
+          <input id="comboSkillSearch" class="combo-input" placeholder="스킬명 검색">
+          <div class="tag-filter-wrap">
+            <button id="tagFilterBtn" class="tag-filter-btn"><span id="tagFilterLabel">기능 태그 선택</span><span>▾</span></button>
+            <div id="tagFilterMenu" class="tag-filter-menu"></div>
+          </div>
+        </div>
+        <div id="paletteList" class="palette-list"></div>
+      </div>
+      <div class="combo-editor">
+        <p class="editor-tip">아이콘 위의 입력키 사각형을 클릭하면 키를 기록할 수 있습니다. 방향키는 자동으로 ↑ ↓ ← → 로 표시됩니다.</p>
+        <div class="timeline-shell" id="timelineShell">
+          <button id="addBarBtn" class="add-bar-btn" title="구간 메모 막대 추가">+</button>
+          <button id="deleteBarBtn" class="delete-bar-btn" title="구간 메모 막대 삭제 모드">-</button>
+          <div id="colorPop" class="color-pop"><div class="color-pop-title">막대 색상 선택</div><div id="colorGrid" class="color-grid"></div></div>
+          <div class="timeline-inner" id="timelineInner">
+            <div id="barLane" class="bar-lane"></div>
+            <div id="comboTrack" class="combo-track"></div>
+          </div>
+        </div>
+        <div class="combo-footer">
+          <span class="editor-tip">스킬 아이콘에 마우스를 올리면 스킬명, 기능 태그, 메모 팝업이 열립니다.</span>
+          <button id="openSaveModal" class="save-main-btn">프리셋 저장</button>
+        </div>
+      </div>
+    </section>
+    <section class="combo-panel">
+      <div class="saved-list"><h2>저장된 프리셋</h2><div id="presetList" class="preset-grid"></div></div>
+    </section>
+  </div>
+</main>
+<div id="skillTooltip" class="skill-tooltip"></div>
+<div id="saveModal" class="modal-backdrop">
+  <div class="modal">
+    <h3>프리셋 저장</h3>
+    <label for="presetNameInput">프리셋 이름 입력</label>
+    <input id="presetNameInput" class="input" placeholder="예: 보스 1사이클 콤보">
+    <label for="skillCodeInput">불러온 스킬 코드 입력</label>
+    <textarea id="skillCodeInput" class="input" placeholder="인게임에서 복사한 불러온 스킬 코드를 붙여넣으세요"></textarea>
+    <div class="modal-actions"><button id="closeSaveModal">취소</button><button id="savePresetBtn" class="modal-save">저장</button></div>
+  </div>
+</div>
+<script>
+const JOBS = {"infighter":{"label":"眞 인파이터","jobLine":"프리스트(여)","storageKey":"jinInfighterComboPresets","skills":[{"order":1,"name":"기본기 숙련","type":"패시브","learnLevel":"1","maxLevel":"200","adoption":"100.0","avgLevel":"115.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["기본 공격, 대시 공격, 점프 공격, 라이징 슬래쉬, 어퍼컷 스킬의 공격력을 증가 시킨다.","결투장에서는 버프/패시브 스킬의 스킬 공격력 증가 효과가 기본기 숙련에 영향을 주지 않는다."],"special":["[결투장]","- 버프/패시브의 공격력 증가 미적용"],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/5a56514f35cf0270ae8d6c65f8fefd78.png"},{"order":2,"name":"퀵 스탠딩","type":"액티브","learnLevel":"1","maxLevel":"20","adoption":"100.0","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["다운 상태에서 바로 앉아있는 모션을 취하면서 적의 공격을 무시한 채로 틈을 노릴 수 있다.","스킬키를 유지하고 있으면 더 오래 앉아있을 수 있다."],"special":["무적"],"tags":["액티브","무적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/ce26c6b69d02a440a81b552bec94f03b.png"},{"order":3,"name":"백스텝","type":"액티브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["약간 뒤로 뛰어서 적의 공격을 피한다."],"special":["[백스텝 강화 습득 시]","- 스킬 시전/피격/다운 중 백스텝 가능","- 별도 쿨타임 적용","- 백스텝 강화 발동 시 무적"],"tags":["액티브","무적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/7822d6d52e10964a6755f142c666b494.png"},{"order":4,"name":"백스텝 강화","type":"패시브","learnLevel":"10","maxLevel":"1","adoption":"82.2","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["스킬 시전 중 혹은 피격 당하거나 다운된 상황에서 무적 효과의 백스텝 시전이 가능해진다.","해당 능력은 백스텝과 별도의 쿨타임을 가지며, 쿨타임 감소 효과에 영향을 받지 않는다.","스킬을 캔슬하며 사용했을 경우와 적에게 피격당한 경우 각각의 시전 상황에 따라 쿨타임이 다르게 적용된다.","스킬 캔슬은 각성기와, 일정 이상 높이로 뛰어오르는 스킬의 경우 시전 불가능하다."],"special":[],"tags":["패시브","무적","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/2b340542e776818b78f3212af184bd6b.png"},{"order":5,"name":"크리티컬 히트","type":"패시브","learnLevel":"20","maxLevel":"20","adoption":"3.3","avgLevel":"4.3","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["정신을 집중하여 물리/마법 크리티컬 히트의 확률을 올린다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/fc1262c19f3d0477ee8eda47b8db8696.png"},{"order":6,"name":"도약","type":"액티브","learnLevel":"10","maxLevel":"1","adoption":"36.3","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["일정 시간 동안 점프력이 20% 향상된다.","도약 효과가 지속되는 동안 스킬키를 재입력하면 종료된다."],"special":["스킬키 재입력 시 도약 효과 종료"],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/1fea5a626f15230237946a11a9d11582.png"},{"order":7,"name":"방어구 마스터리","type":"패시브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["방어구 착용 시 각종 스탯이 증가한다.","장착한 방어구의 수가 많을수록 그 효과가 커지며, 증가하는 스탯의 종류 및 수치는 전직에 따라 다르다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/892ef624d8bf3d7fc045f84825fd6104.png"},{"order":8,"name":"어퍼컷","type":"액티브","learnLevel":"1","maxLevel":"20","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["주먹으로 올려쳐 적을 띄운다.","발동 순간 슈퍼아머 판정이 있다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","슈퍼아머","후딜캔슬","위빙연계"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/150aa05b9ee8b9c7c04a25f3e425900c.png"},{"order":9,"name":"원!투!","type":"액티브","learnLevel":"1","maxLevel":"70","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["전방을 향해 빠르게 잽과 스트레이트를 연달아 날린다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/030663e99462f628b4c9f813e1406c4e.png"},{"order":10,"name":"위빙","type":"액티브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["제자리 시전 시 좌우로 상체를 움직이며 적의 공격을 피한다.","방향키를 입력하며 시전 시 일정 거리를 미끄러지며 이동한다.","스킬키 추가 입력을 통해 연속으로 사용할 수 있으며, 시전 중 점프키 입력 시 즉시 종료된다.","각성기, 그랩 블로우 및 어그레시브 스킬을 제외한 모든 스킬 시전 중 캔슬하여 위빙을 발동할 수 있고, 위빙 시전 중 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["일부 무적","방향키 입력 시 해당 방향으로 이동","2회 연속 시전 가능","시전 중 점프키 입력 시 중지","각성기, 그랩 블로우 및 어그레시브 스킬을 제외한 스킬 시전 중 캔슬하여 위빙 발동 가능","위빙 시전 중 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","일부 무적","무적","후딜캔슬","위빙연계","어그레시브","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/89c505581267af77c6d58dc49b710550.png"},{"order":11,"name":"치유의 기도","type":"액티브","learnLevel":"5","maxLevel":"70","adoption":"1.6","avgLevel":"8.6","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["신께 기도를 드려 자신의 상처를 치유해 HP를 회복한다.","크루세이더로 전직 시 회복량이 증가하고, 주변 파티원도 함께 치유해 HP를 회복시킨다.","라파엘의 축복을 습득하면 용맹의 아리아, 재생의 아리아 시전 중 치유의 기도를 사용할 수 있다."],"special":["[크루세이더 전직 시]","- HP 회복량 증가 및 파티원 HP 회복","[라파엘의 축복 습득 시]","- 용맹의 아리아, 재생의 아리아 시전 중 사용 가능"],"tags":["액티브","회복","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/0969cd4054d93da07708108c0cc1c4b5.png"},{"order":12,"name":"스크류 스트레이트","type":"액티브","learnLevel":"5","maxLevel":"70","adoption":"61.7","avgLevel":"1.3","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["주먹을 순간적으로 회전시키며 전방을 향해 스트레이트를 날린다.","앞 방향키를 입력하며 시전 시 전진하며, 전진 거리는 캐릭터의 이동 속도에 비례하여 증가한다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["앞 방향키 입력 시 전진","전진 거리는 이동 속도에 비례하여 증가","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계","전진/이동","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/89a4529234904fcbb3abe289e281f2fd.png"},{"order":13,"name":"세컨드 어퍼","type":"패시브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["대시 공격 중 공격키 입력 시 어퍼컷을 날린다.","공격력은 어퍼컷 스킬 공격력이 적용된다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/a81e5b7defa1819263ed8e86f69fd06f.png"},{"order":14,"name":"그랩 블로우","type":"액티브","learnLevel":"10","maxLevel":"70","adoption":"1.8","avgLevel":"1.9","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["전방의 적을 잡아 끌어와 어퍼컷으로 띄운 뒤 후려쳐 날려버린다.","잡기 성공 시 무적 상태가 되며, 잡기 불가 적에게는 발동되지 않는다.","후려치기 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["일부 무적, 적 홀드(잡기)","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","일부 무적","무적","후딜캔슬","홀드/잡기","적 모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/515b442ffbf61a82371abb645c149a31.png"},{"order":15,"name":"큐어","type":"액티브","learnLevel":"10","maxLevel":"11","adoption":"2.3","avgLevel":"1.0","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["범위 내 파티원들의 상태 이상을 치유한다."],"special":[],"tags":["액티브","회복","상태이상"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/4655101518604f874721b3cc249aae10.png"},{"order":16,"name":"윌 오브 피스트","type":"패시브","learnLevel":"15","maxLevel":"20","adoption":"100.0","avgLevel":"9.9","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["사용자의 의지를 힘으로 발현하는 성물, 윌 오브 피스트의 힘이 주먹에 깃든다.","기본 공격 및 전직 계열 스킬 공격력이 증가하고, 던전 입장 시 거병을 지면에 꽂으며 인파이터 전용 공격을 사용할 수 있게 된다.","On/Off 기능을 통해 던전 내에서 장착 무기의 출력 여부를 설정할 수 있다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/66a9967e677651d0def34c475795ccde.png"},{"order":17,"name":"고저스 컴비네이션","type":"액티브","learnLevel":"15","maxLevel":"1","adoption":"97.5","avgLevel":"1.0","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["잽과 훅을 자연스럽게 연계하여 공격한다.","기본기 숙련의 영향을 받는다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["제압","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계","제압"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/87a918bb22cfc959a16e0bf939bb6c24.png"},{"order":18,"name":"더킹 스텝","type":"액티브","learnLevel":"15","maxLevel":"70","adoption":"69.7","avgLevel":"1.2","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["몸을 숙이며 전방으로 빠르게 대시한 뒤 뒤돌아 잽을 날린다.","잽 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["일부 무적","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","일부 무적","무적","후딜캔슬","위빙연계"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/aa51c4ddf1659092fa9ed612b9837061.png"},{"order":19,"name":"바디 블로","type":"액티브","learnLevel":"20","maxLevel":"70","adoption":"99.7","avgLevel":"22.3","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["큰 경직을 주는 블로를 가한다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다.","[마이 웨이 습득 시]","시전 시 주변의 가장 강한 적에게 접근한 뒤 블로를 가하며, 범위 내에 적이 없으면 시전할 수 없다."],"special":["제압","후딜레이를 캔슬하여 다른 스킬 발동 가능","[마이 웨이 습득 시]","- 주변 적 추적","- 탐색 범위 내에 적이 있을 시 사용 가능"],"tags":["액티브","후딜캔슬","위빙연계","제압","추적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/863295a0fc634cf5fcc01e82a735fd6b.png"},{"order":20,"name":"사이드 너클","type":"액티브","learnLevel":"20","maxLevel":"70","adoption":"20.9","avgLevel":"14.6","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["백너클을 가한 뒤 적을 끌어오며 타격하고, 스킬키 추가 입력 시 어퍼컷을 날린다.","앞 방향키를 입력하며 시전 시 전진한다.","끌어오기 및 어퍼컷 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["스킬키 추가 입력 시 어퍼컷 시전","앞 방향키 입력 시 전진","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계","전진/이동","적 모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/3153ca0e6752a6283412c59c5ec8e002.png"},{"order":21,"name":"텐션","type":"패시브","learnLevel":"25","maxLevel":"11","adoption":"100.0","avgLevel":"1.0","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["사용자의 의지를 힘으로 발현하는 윌 오브 피스트는, '어떠한 의지든 상관없이' 그것을 힘으로 만들어낸다.","기본 공격 및 스킬로 적을 공격 시 텐션이 오르며, 텐션이 한계치에 도달하면 텐션 개방 상태에 진입한다. 텐션 상승량은 스킬 별로 차이가 있다.","텐션 개방 상태에선 슈퍼아머가 부여되고 공격/이동 속도가 추가로 증가하며, 어그레시브 스킬들의 [어그레시브 스킬] 효과가 발동된다.","텐션 개방 상태에서 첫 어그레시브 스킬 시전 후 공격, 혹은 스킬 사용 중이 아닌 상태가 되면 유예 시간이 주어지며, 그 상태로 유예 시간이 모두 지나면 개방 상태가 종료된다.","습득 시 모든 스킬 MP 소모가 감소하고, 각성기 및 어그레시브가 아닌 일반 액티브 스킬들의 쿨타임이 감소하며, 이동 속도가 증가한다.","On/Off 기능을 통해 화면 테두리 이펙트 출력 여부를 설정할 수 있다."],"special":["[불완전 연소 습득 시]","- 던전 입장 시 텐션 획득","- 텐션 자동 증가"],"tags":["패시브","슈퍼아머","어그레시브","텐션","전진/이동","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/b69d38bcddd41b3566c6d5cf78d060bb.png"},{"order":22,"name":"페이크 트위스트","type":"액티브","learnLevel":"25","maxLevel":"70","adoption":"11.7","avgLevel":"32.4","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["한 손으로 페이크를 넣은 뒤 다른 손으로 스트레이트를 날린다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/7f9ffcd296361f1367b8b74e773d5e99.png"},{"order":23,"name":"디바인 크러시","type":"액티브","learnLevel":"25","maxLevel":"70","adoption":"100.0","avgLevel":"18.4","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["지면을 내리쳐 충격파를 발생시킨다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 보다 넓은 충격파를 발생시킨다.","내려친 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다.","[마이 웨이 습득 시]","충격파 공격에 적 홀드 효과가 추가된다.","텐션 개방 상태에서 첫 어그레시브 스킬로 디바인 크러시를 시전 시 유예 시간이 적용되지 않는다."],"special":["제압","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 충격파 기본 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능","[마이 웨이 습득 시]","- 적 홀드 효과 추가","- 텐션 개방 상태에서 첫 어그레시브 스킬로 사용 시 유예 시간이 적용되지 않음"],"tags":["액티브","후딜캔슬","어그레시브","텐션","제압","홀드/잡기","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/ca2536eb56df0e812c88c59cabd38be0.png"},{"order":24,"name":"신격 수련","type":"패시브","learnLevel":"30","maxLevel":"20","adoption":"100.0","avgLevel":"10.0","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["신격권을 단련하여 물리 공격력, 적중률, 회피율이 증가한다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/02ac8e048f7bbcfa616e74ac68988872.png"},{"order":25,"name":"매스 피스톨","type":"액티브","learnLevel":"30","maxLevel":"70","adoption":"100.0","avgLevel":"45.4","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["적에게 주먹을 꽂아 넣은 뒤, 순간적으로 강한 힘을 가해 강력한 충격파를 발생시킨다.","주먹이 적에게 맞지 않으면 바로 종료된다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 주먹을 크게 내질러 강력한 충격파를 발생시킨다.","적에게 맞지 않아도 충격파가 발생하며, 홀드 기능은 사라지지만 제압력은 적용된다.","충격파 발생 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["적 홀드, 제압","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 공격 횟수 감소","- 충격파 공격력 및 기본 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","후딜캔슬","어그레시브","텐션","제압","홀드/잡기","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/481348575c1e141925c836b59c5db3ca.png"},{"order":26,"name":"블로샷","type":"액티브","learnLevel":"30","maxLevel":"70","adoption":"95.4","avgLevel":"44.3","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["좌우 블로 2연타 후 스트레이트를 연계하여 공격한다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","후딜캔슬","위빙연계","연타가속"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/5f4c55fe2ebdf0623bd76d4fda872ddc.png"},{"order":27,"name":"신기일체","type":"액티브","learnLevel":"30","maxLevel":"20","adoption":"100.0","avgLevel":"10.0","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["성물 윌 오브 피스트의 기운을 온 몸에 고루 두르며 전의를 가다듬는다.","일정 시간 기본 공격 및 전직 계열 스킬 공격력과 공격 속도가 증가한다."],"special":[],"tags":["액티브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/c1dd8b776fb1dd24c6373c678ef1dd2e.png"},{"order":28,"name":"허리케인 롤","type":"액티브","learnLevel":"35","maxLevel":"70","adoption":"80.7","avgLevel":"37.4","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":["무색 큐브 조각 소모 1개"],"description":["주변의 적들을 끌어들이며 연속 공격 후 어퍼컷을 날린다.","공격 혹은 스킬키를 연타할수록 공격 속도가 빨라지고, 점프키 입력 시 연속 공격을 종료하고 바로 어퍼컷을 날린다.","연속 공격 중 상하좌우 방향키 입력으로 이동이 가능하다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["적 모으기","공격키/스킬키 연타 시 공격 속도 증가 (허리케인 컴비네이션 VP 습득 시엔 미적용)","점프키 입력 즉시 어퍼컷 발동 (허리케인 컴비네이션 VP 습득 시엔 미적용)","방향키 입력으로 이동 가능 (허리케인 컴비네이션 VP 습득 시엔 미적용)","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","무색큐브","후딜캔슬","위빙연계","전진/이동","적 모으기","연타가속","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/95b58ec89893dd9e50da1281ebe57175.png"},{"order":29,"name":"할로우 백","type":"액티브","learnLevel":"40","maxLevel":"70","adoption":"21.8","avgLevel":"8.8","groupTitle":"40렙제 스킬","groupKey":"40렙제","extra":["무색 큐브 조각 소모 1개"],"description":["눈으로 쫓을 수 없을 정도로 빠르게 대시하며 연속 공격 후 뒤돌아 올려쳐 충격파를 발생시킨다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","무색큐브","후딜캔슬","위빙연계"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/573723c8c0614f5b1218ca9ff992115b.png"},{"order":30,"name":"헤븐리 컴비네이션","type":"액티브","learnLevel":"40","maxLevel":"70","adoption":"75.2","avgLevel":"36.8","groupTitle":"40렙제 스킬","groupKey":"40렙제","extra":["무색 큐브 조각 소모 1개"],"description":["훅, 백너클, 스트레이트를 자연스럽게 이어서 날린다.","훅과 백너클 공격에 맞은 적을 앞으로 끌어온다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["적 모으기","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","무색큐브","후딜캔슬","위빙연계","적 모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/ebff277c02cc8b54c32635cd0d25f6f3.png"},{"order":31,"name":"기간틱 캐넌","type":"액티브","learnLevel":"45","maxLevel":"70","adoption":"97.7","avgLevel":"37.4","groupTitle":"40렙제 스킬","groupKey":"40렙제","extra":["무색 큐브 조각 소모 2개"],"description":["온 힘을 다한 혼신의 펀치를 날린다. 적을 타격하면 강력한 충격파가 발생한다.","앞 방향키를 입력하며 시전 시 전방으로 전진한다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 더 강력한 충격파가 발생한다.","일격을 날린 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["앞 방향키 입력 시 전진","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 충격파 기본 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","후딜캔슬","어그레시브","텐션","전진/이동","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/b860cbf5979b4bcc6beea725636b915e.png"},{"order":32,"name":"감춰진 본능","type":"패시브","learnLevel":"48","maxLevel":"50","adoption":"100.0","avgLevel":"25.0","groupTitle":"50렙제 스킬","groupKey":"50렙제","extra":[],"description":["자신의 폭력성을 최대한 억제하고 가다듬으려 노력했으나, 주먹을 날릴 때마다 흘러넘치는 본능은 어쩔 수 없었다.","기본 공격 및 전직 계열 스킬 공격력과 물리 크리티컬 확률이 증가한다."],"special":[],"tags":["패시브","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/37cf7b7a269058dc02bef5b5bc9de282.png"},{"order":33,"name":"임페리움 레이지","type":"액티브","learnLevel":"50","maxLevel":"50","adoption":"100.0","avgLevel":"15.0","groupTitle":"50렙제 스킬","groupKey":"50렙제","extra":["무색 큐브 조각 소모 5개"],"description":["폭력적인 본능을 최대한 갈무리하여 주먹에 담아, 한방 한방 묵직한 연속 펀치로 공격한다.","주변 일정 범위 내의 가장 강한 적을 추적하여 발동하며, 범위 내에 적이 없으면 시전할 수 없다.","피니시 공격 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["무적, 추적","탐색 범위 내에 적이 있을 시 사용 가능","후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","무적","후딜캔슬","추적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/97972dba4694d6c0fcd2f7e8efb3a499.png"},{"order":34,"name":"스톰 피스트","type":"액티브","learnLevel":"60","maxLevel":"50","adoption":"75.4","avgLevel":"22.0","groupTitle":"60렙제 스킬","groupKey":"60렙제","extra":["무색 큐브 조각 소모 1개"],"description":["여러 발의 펀치를 긴 컴비네이션으로 연계하여 빠르게 날린다. 마지막 내려치기에 맞은 적은 바운스된다.","공격 혹은 스킬키를 연타할수록 공격 속도가 빨라지고, 점프키 입력 시 연속 공격을 종료하고 바로 내려치기를 날린다.","연타 중 앞 방향키 입력 시 전진한다.","후딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["공격키/스킬키 연타 시 공격 속도 증가","점프키 입력 즉시 내려치기 발동","앞 방향키 입력 시 전진","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","무색큐브","후딜캔슬","위빙연계","전진/이동","연타가속","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/595908ad107ed3f495329770e9bb9ea5.png"},{"order":35,"name":"불완전 연소","type":"패시브","learnLevel":"75","maxLevel":"50","adoption":"100.0","avgLevel":"16.0","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":[],"description":["뿜어져 나오는 폭력적인 충동은 아무리 적을 때려눕혀도 해소되지 않았다.","기본 공격 및 전직 계열 스킬 공격력이 증가하고, 텐션이 일정 수치 아래로 떨어지지 않으며, 적을 공격하지 않아도 시간에 따라 증가한다."],"special":[],"tags":["패시브","텐션","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/4e9e8942841b9767f683fb23c1ef1435.png"},{"order":36,"name":"브루탈 컴비네이션","type":"액티브","learnLevel":"75","maxLevel":"50","adoption":"100.0","avgLevel":"23.0","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":["무색 큐브 조각 소모 3개"],"description":["사정없이 휘두르는 강력한 펀치 2발로 공격 후 온 몸으로 들이받는 어깨치기로 날려버린다.","앞 방향키 입력 시 전진하며 공격한다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 바닥을 두 번 내려친 뒤 튀어오른 돌을 박살내 강력한 충격파를 발생시켜 주변 넓은 범위를 공격한다.","충격파를 발생시킨 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["앞 방향키 입력 시 전진하며 공격","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 기본 공격 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","후딜캔슬","어그레시브","텐션","전진/이동","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/ef896bbdc68660c22b6e60502044d690.png"},{"order":37,"name":"바이올런트 크러시","type":"액티브","learnLevel":"70","maxLevel":"50","adoption":"99.9","avgLevel":"26.0","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":["무색 큐브 조각 소모 3개"],"description":["있는 힘껏 지면을 주먹으로 연달아 내려친다. 펀치는 충격파를 발생시켜 적들을 공격한다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 온 힘을 다한 한 방의 내려찍기로 변경되며, 보다 강렬하고 넓은 충격파를 발생시킨다.","내려찍기 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 공격 횟수 감소","- 충격파 공격력 및 기본 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","후딜캔슬","어그레시브","텐션","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/c381973d97e2e906ea53ba2add33d49c.png"},{"order":38,"name":"페이탈 임팩트","type":"액티브","learnLevel":"80","maxLevel":"50","adoption":"100.0","avgLevel":"21.0","groupTitle":"80렙제 스킬","groupKey":"80렙제","extra":["무색 큐브 조각 소모 5개"],"description":["지면으로 내려꽂은 뒤 바로 반대로 쳐 올리며 강력한 어퍼로 적을 날려버린다.","시전 시 앞 방향키를 입력하면 전진하며 공격한다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 더 넓은 범위를 과격하게 공격하며, 블로 공격 적중 여부와 관계없이 어퍼를 날린다.","어퍼 공격 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["적 홀드, 제압","앞 방향키 입력 시 전진하며 공격","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 기본 공격 범위 증가","- 블로 공격 적중 여부와 관계없이 어퍼 공격 발동","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","후딜캔슬","어그레시브","텐션","전진/이동","제압","홀드/잡기","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/5cf8bfba8b456626deac8bee6f49195f.png"},{"order":39,"name":"아르데레 비헤멘스","type":"액티브","learnLevel":"85","maxLevel":"50","adoption":"100.0","avgLevel":"7.0","groupTitle":"80렙제 스킬","groupKey":"80렙제","extra":["무색 큐브 조각 소모 10개"],"description":["한발한발 주먹에 폭력적인 의지를 실어 연발 펀치를 날린다.","공격 혹은 스킬키를 연타할수록 공격 속도가 빨라진다.","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 발현된 폭력성이 주변을 뒤덮어 공격 범위가 대폭 증가한다.","피니시 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다."],"special":["무적","공격키/스킬키 연타 시 공격 속도 증가","[어그레시브 스킬]","텐션 개방 상태에서 시전 시 다음 효과 적용","- 기본 공격 범위 증가","- 후딜레이를 캔슬하여 다른 스킬 시전 가능"],"tags":["액티브","무색큐브","무적","후딜캔슬","어그레시브","텐션","연타가속","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/e9a1a1cce5aeaac5414a98a625e7285c.png"},{"order":40,"name":"마이 웨이","type":"패시브","learnLevel":"95","maxLevel":"50","adoption":"100.0","avgLevel":"9.0","groupTitle":"90렙제 스킬","groupKey":"90렙제","extra":[],"description":["자신의 믿음에 확신을 가지게 된 진(眞) 인파이터는 망설임 없이 자신만의 길을 걷기 시작한다.","기본 공격 및 전직 계열 스킬 공격력이 증가하고, 바디 블로와 디바인 크러시 스킬에 부가 효과가 추가된다.","[바디 블로]","시전 시 주변의 가장 강한 적에게 접근한 뒤 블로를 가하며, 범위 내에 적이 없으면 시전할 수 없다.","[디바인 크러시]","충격파 공격에 적 홀드 효과가 추가된다.","텐션 개방 상태에서 첫 어그레시브 스킬로 디바인 크러시를 시전 시 유예 시간이 적용되지 않는다."],"special":[],"tags":["패시브","어그레시브","텐션","홀드/잡기","추적","버프/강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/3b712691fcaaaa80438e5e31b6451884.png"},{"order":41,"name":"엑셀 드라이브","type":"액티브","learnLevel":"95","maxLevel":"50","adoption":"100.0","avgLevel":"13.0","groupTitle":"90렙제 스킬","groupKey":"90렙제","extra":["무색 큐브 조각 소모 7개"],"description":["넘쳐나는 폭력성을 깔끔하게 갈무리하여 폭발시킨다.","자세를 잡고 전방을 향해 빠르게 펀치를 세 번 날리면, 잠시 후 뒤늦게 펀치에 의한 강력한 충격파가 발생하여 공격한다.","자세를 잡을 때 텐션 개방 상태가 아니라면 즉시 텐션 개방 상태가 된다.","펀치 후 딜레이를 캔슬하여 다른 스킬을 발동할 수 있다. 단, 위빙은 언제든 캔슬하여 발동할 수 있다."],"special":["무적","시전 즉시 텐션 개방 상태 진입","후딜레이를 캔슬하여 다른 스킬 발동 가능"],"tags":["액티브","무색큐브","무적","후딜캔슬","위빙연계","텐션"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/f8226512ea3dbcb1fe1374baa0c6bbee.png"},{"order":42,"name":"푸그누스 볼룬타티스","type":"액티브","learnLevel":"100","maxLevel":"50","adoption":"98.6","avgLevel":"5.0","groupTitle":"100렙제 스킬","groupKey":"100렙제","extra":["무색 큐브 조각 소모 15개"],"description":["진(眞) 인파이터의 강한 의지는 성물 윌 오브 피스트를 실체화시키며, 그 의지가 담긴 주먹은 망설임 없이 내질러져 성물 자체를 포함하여 모든 것을 박살내버린다.","[진(眞) 각성기]","진(眞) 각성기 시전 시, 링크한 스킬의 쿨타임이 함께 적용됩니다.","링크한 스킬이 쿨타임인 경우, 진(眞) 각성기를 사용할 수 없습니다."],"special":["무적"],"tags":["액티브","무색큐브","무적","진각성"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%ED%94%84%EB%A6%AC%EC%8A%A4%ED%8A%B8(%EC%97%AC)/96c8ddd388e1b08e7fc98c5041382e26.png"}],"groups":[{"title":"공용 스킬","key":"공용","range":"1~6번"},{"title":"1렙제 스킬","key":"1렙제","range":"7~13번"},{"title":"10렙제 스킬","key":"10렙제","range":"14~18번"},{"title":"20렙제 스킬","key":"20렙제","range":"19~23번"},{"title":"30렙제 스킬","key":"30렙제","range":"24~28번"},{"title":"40렙제 스킬","key":"40렙제","range":"29~31번"},{"title":"50렙제 스킬","key":"50렙제","range":"32~33번"},{"title":"60렙제 스킬","key":"60렙제","range":"34번"},{"title":"70렙제 스킬","key":"70렙제","range":"35~37번"},{"title":"80렙제 스킬","key":"80렙제","range":"38~39번"},{"title":"90렙제 스킬","key":"90렙제","range":"40~41번"},{"title":"100렙제 스킬","key":"100렙제","range":"42번"}],"tags":["액티브","패시브","무적","일부 무적","슈퍼아머","후딜캔슬","위빙연계","어그레시브","텐션","전진/이동","제압","홀드/잡기","추적","적 모으기","연타가속","회복","상태이상","버프/강화","무색큐브","진각성"]},"breaker":{"label":"眞 브레이커","jobLine":"제국기사","storageKey":"jinBreakerComboPresets","skills":[{"order":1,"name":"기본기 숙련","type":"패시브","learnLevel":"1","maxLevel":"200","adoption":"100.0","avgLevel":"115.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["기본 공격, 대시 공격, 점프 공격, 레이즈 어퍼컷 스킬의 공격력을 증가 시킨다.","결투장에서는 버프/패시브 스킬의 스킬 공격력 증가 효과가 기본기 숙련에 영향을 주지 않는다."],"special":["[결투장]","- 버프/패시브의 공격력 증가 미적용"],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/5a56514f35cf0270ae8d6c65f8fefd78.png"},{"order":2,"name":"퀵 스탠딩","type":"액티브","learnLevel":"1","maxLevel":"20","adoption":"100.0","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["다운 상태에서 바로 앉아있는 모션을 취하면서 적의 공격을 무시한 채로 틈을 노릴 수 있다.","스킬키를 유지하고 있으면 더 오래 앉아있을 수 있다."],"special":["무적"],"tags":["액티브","무적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/ce26c6b69d02a440a81b552bec94f03b.png"},{"order":3,"name":"백스텝","type":"액티브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["약간 뒤로 뛰어서 적의 공격을 피한다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/7822d6d52e10964a6755f142c666b494.png"},{"order":4,"name":"백스텝 강화","type":"패시브","learnLevel":"10","maxLevel":"1","adoption":"70.4","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["스킬 시전 중 혹은 피격 당하거나 다운된 상황에서 무적 효과의 백스텝 시전이 가능해진다.","해당 능력은 백스텝과 별도의 쿨타임을 가지며, 쿨타임 감소 효과에 영향을 받지 않는다.","스킬을 캔슬하며 사용했을 경우와 적에게 피격당한 경우 각각의 시전 상황에 따라 쿨타임이 다르게 적용된다.","스킬 캔슬은 각성기와, 일정 이상 높이로 뛰어오르는 스킬의 경우 시전 불가능하다."],"special":[],"tags":["패시브","무적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/2b340542e776818b78f3212af184bd6b.png"},{"order":5,"name":"크리티컬 히트","type":"패시브","learnLevel":"20","maxLevel":"20","adoption":"8.7","avgLevel":"1.9","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["정신을 집중하여 물리/마법 크리티컬 히트의 확률을 올린다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/fc1262c19f3d0477ee8eda47b8db8696.png"},{"order":6,"name":"도약","type":"액티브","learnLevel":"10","maxLevel":"1","adoption":"37.9","avgLevel":"1.0","groupTitle":"공용 스킬","groupKey":"공용","extra":[],"description":["일정 시간 동안 점프력이 20% 향상된다.","도약 효과가 지속되는 동안 스킬키를 재입력하면 종료된다."],"special":["스킬키 재입력 시 도약 효과 종료"],"tags":["액티브","재입력"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/1fea5a626f15230237946a11a9d11582.png"},{"order":7,"name":"방어구 마스터리","type":"패시브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["방어구 착용 시 각종 스탯이 증가한다.","장착한 방어구의 수가 많을수록 그 효과가 커지며, 증가하는 스탯의 종류 및 수치는 전직에 따라 다르다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EA%B3%B5%EC%9A%A9/892ef624d8bf3d7fc045f84825fd6104.png"},{"order":8,"name":"덱 브레이커","type":"패시브","learnLevel":"1","maxLevel":"1","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["갑판을 밟고 올라서는 브레이커의 발걸음에서, 거칠 것이 없는 제국의 당당함이 느껴진다.","각성기를 제외한 전직 계열 스킬의 쿨타임이 감소하고, 스킬 시전 시 MP 소모량이 감소한다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/717f1e2104fe4b796f800352fa143ecc.png"},{"order":9,"name":"와이드 클리브","type":"액티브","learnLevel":"1","maxLevel":"70","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["앵커를 넓게 휘둘러 전방의 적을 타격한다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/eb71e1d82d92c7e1d40500a0dcd77aa6.png"},{"order":10,"name":"레이즈 어퍼컷","type":"액티브","learnLevel":"1","maxLevel":"20","adoption":"100.0","avgLevel":"1.0","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["장비한 무기를 바닥에서부터 힘차게 쓸어 올려, 타격된 적을 공중에 띄운다.","공격 시 슈퍼아머 판정이 존재한다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/3c5604bdbb0240b8f130f59ab40509c3.png"},{"order":11,"name":"포인트 쓰러스트","type":"액티브","learnLevel":"5","maxLevel":"70","adoption":"29.8","avgLevel":"1.2","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["전방으로 신속하게 돌진하여 적의 급소를 타격한 후 내려 벤다.","잡기 가능한 적일 경우, 홀드 상태에 빠트린다."],"special":["일부 무적, 적 홀드(잡기)"],"tags":["액티브","일부 무적","홀드/잡기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/9dda3f4a849dba1a288dd65e116860f2.png"},{"order":12,"name":"캐넌 킥","type":"액티브","learnLevel":"5","maxLevel":"70","adoption":"56.1","avgLevel":"1.2","groupTitle":"1렙제 스킬","groupKey":"1렙제","extra":[],"description":["브레이커에게 있어 그 강력한 신체는 앵커 못지 않게 든든한 무기이다. 시전 시 전방으로 날아차기를 가한다.","공중에서도 시전 가능하며, 공중 시전 시 전방의 지면을 향해 발차기를 내려 찍는다.","시전 중에는 받는 데미지가 감소한다."],"special":["지상 및 공중 사용 가능"],"tags":["액티브","지상/공중"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/4655101518604f874721b3cc249aae10.png"},{"order":13,"name":"퀵 바이섹션","type":"액티브","learnLevel":"10","maxLevel":"70","adoption":"0.4","avgLevel":"1.1","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["절도 있는 동작으로 전방의 적을 내려 벤다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/0969cd4054d93da07708108c0cc1c4b5.png"},{"order":14,"name":"러프 보딩","type":"액티브","learnLevel":"10","maxLevel":"70","adoption":"80.8","avgLevel":"1.3","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["전방으로 무식하게 돌진하며 돌진 중 몸에 닿는 적들을 날려버린다.","스킬 키 지속 입력을 통해 돌진 상태를 유지할 수 있으며, 돌진 상태일 때 점프 키(c)를 눌러 점프가 가능하다.","돌진 중 캔슬하여 타이드 피어서, 피어스 임팩트 스킬을 시전할 수 있으며, 이 때는 해당 스킬의 준비 모션을 캔슬하고 시전한다.","돌진 중에는 받는 데미지가 감소한다."],"special":["스킬 키 지속 입력 시 지속 시간 증가","캔슬하여 타이드 피어서, 피어스 임팩트 시전 가능"],"tags":["액티브","지속입력","후딜캔슬"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/c9664191611af31142e052dfaef84530.png"},{"order":15,"name":"노 쿼터","type":"패시브","learnLevel":"15","maxLevel":"20","adoption":"100.0","avgLevel":"10.0","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["제국의 적들에게, 베풀 수 있는 자비는 없다. 브레이커의 기본 공격 및 전직 계열 스킬의 공격력이 증가하고, 물리 크리티컬 확률이 증가한다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/f2fb27162beb0b87a7cb9af7900e95f2.png"},{"order":16,"name":"훅 샷","type":"액티브","learnLevel":"15","maxLevel":"1","adoption":"99.9","avgLevel":"1.0","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["스킬 습득 시 범위 내 가장 강력한 적에게 자동으로 훅이 설치된다. 추적 범위 내 적이 있다면, 스킬 시전 시 훅이 설치된 적에게 강습하여 날아차기 공격을 가한다.","전직 계열 스킬의 후딜레이를 캔슬하여 훅 샷을 시전할 수 있으며, 훅 샷의 후딜레이를 캔슬하여 전직 계열 스킬을 시전할 수 있다.","지상 및 공중에서 시전할 수 있다.","기본기 숙련의 영향을 받는다."],"special":["무적"],"tags":["액티브","무적","지상/공중","후딜캔슬"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/2f5d03c7848effbc0a23f4df45d9ca46.png"},{"order":17,"name":"앵커 킥","type":"액티브","learnLevel":"15","maxLevel":"70","adoption":"70.1","avgLevel":"1.5","groupTitle":"10렙제 스킬","groupKey":"10렙제","extra":[],"description":["앵커를 지지대 삼아 강력한 회전력을 담은 날아차기를 시전한다. 타격된 적은 멀리 날아가며, 다른 적이나 벽에 충돌한다.","시전 시 방향 키 입력을 통해 날아차기의 방향을 정할 수 있다.","시전 중에는 받는 데미지가 감소한다."],"special":["방향 키 입력을 통해 시전 방향 변경 가능"],"tags":["액티브","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/cfacda0647b9a0f595df2c2aad30c18d.png"},{"order":18,"name":"어베스트","type":"액티브","learnLevel":"20","maxLevel":"20","adoption":"100.0","avgLevel":"10.0","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["제국의 적들에게 정지 명령을 내린다. 응하지 않는다면, 브레이커가 고대하던 공무 집행의 시간이 찾아올 뿐이다.","기본 공격 및 전직 계열 스킬의 공격력이 증가한다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/45442bbbe33540b4deeec29437dae70c.png"},{"order":19,"name":"선체 파괴","type":"액티브","learnLevel":"20","maxLevel":"70","adoption":"100.0","avgLevel":"1.4","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["전방으로 높이 도약한 후 지면을 내려 찍는다.","공중에서도 시전 가능하다."],"special":["지상 및 공중 사용 가능","[역조 습득 시]","- 넓은 범위를 타격하는 충격파 생성"],"tags":["액티브","지상/공중","역조강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/01c3a2fb793d293a25ed8dc7a0d70c1a.png"},{"order":20,"name":"스위핑 스트라이크","type":"액티브","learnLevel":"25","maxLevel":"70","adoption":"100.0","avgLevel":"37.9","groupTitle":"20렙제 스킬","groupKey":"20렙제","extra":[],"description":["앵커로 전방을 넓게 쓸어 타격된 적들을 한 곳에 모은다. 앵커가 쓸고 지나간 자리에는 돌풍이 휘몰아쳐 범위 내의 적들에게 데미지를 준다."],"special":["적 모으기"],"tags":["액티브","모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/8f73f243041c2d27739fe7696f02bf9b.png"},{"order":21,"name":"백병전 전문가","type":"패시브","learnLevel":"30","maxLevel":"20","adoption":"100.0","avgLevel":"10.0","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["아무렇게나 부수고 다니는 것으로 보이겠지만, 선상에서의 백병전은 보기보다 정교함을 요구하는 일이다.","기본 공격 및 전직 계열 스킬의 공격력이 증가하며, 적중률이 증가한다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/8c2379737c5acc935c1731f67f607655.png"},{"order":22,"name":"딥 워터 콜","type":"액티브","learnLevel":"30","maxLevel":"70","adoption":"99.2","avgLevel":"45.9","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["브레이커가 해상 전투에 도움이 될만한 물건을 골라, 주변 가장 강한 적의 머리 위로 떨어뜨린다. 해당 물건은 이후 브레이커가 타격을 가하면 호응하여, 주변의 적에게 추가적인 데미지를 입힌다.","탐색 범위 내 적이 없다면 브레이커의 전방에 물건을 떨어뜨린다.","다른 행동 중 시전하면, 별도의 시전 모션 없이 스킬을 사용할 수 있다.(각성기 제외)"],"special":["다른 행동 중 시전 시, 시전 모션 없이 스킬 사용"],"tags":["액티브","모션없이시전"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/3829c15bf5f520c13998a3479ba0ce7b.png"},{"order":23,"name":"타이드 피어서","type":"액티브","learnLevel":"30","maxLevel":"70","adoption":"99.7","avgLevel":"32.5","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["전방으로 강렬한 찌르기 공격을 가한다. 타격 된 적들은 브레이커의 전방으로 끌려온다.","앞 방향 키 입력 시 전방으로 전진한다.","타이드 피어서의 후딜레이를 캔슬하여 전직 계열 스킬을 시전할 수 있다."],"special":["적 모으기","스킬 키 지속 입력을 통해 충전 가능","[역조 습득 시]","- 시전 중 받는 데미지 감소"],"tags":["액티브","지속입력","후딜캔슬","전진/이동","모으기","역조강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/9cb6f9ed646fa87f9b7680a42ce83d1a.png"},{"order":24,"name":"게일 슬래시","type":"액티브","learnLevel":"35","maxLevel":"70","adoption":"100.0","avgLevel":"6.5","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":["무색 큐브 조각 소모 1개"],"description":["앵커를 십자 방향으로 번갈아 휘두른다. 첫 베기 이후 일정 시간 이내에 스킬 키 추가 입력을 통해 두 번째 베기를 시전할 수 있으며, 연달아 시전 시 첫 베기의 후딜레이를 캔슬하여 두 번째 베기를 시전할 수 있다."],"special":["스킬 키 재입력을 통해 두 번째 베기 시전"],"tags":["액티브","재입력","후딜캔슬"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/4224f9b0b8c7c903e9a1e0f9d9f6d04d.png"},{"order":25,"name":"타이드 바운드","type":"액티브","learnLevel":"35","maxLevel":"70","adoption":"99.6","avgLevel":"28.6","groupTitle":"30렙제 스킬","groupKey":"30렙제","extra":[],"description":["추적 범위 내 훅이 설치된 적에게 날아들어 강습 공격을 가한다. 적과 위치가 가까울 시, 강습 공격 대신 베기 공격을 가한다.","훅이 설치된 적을 타격 할 때마다 타이드 바운드의 남은 쿨타임이 감소한다.","잡기 가능한 적이라면, 지상에서 아래 방향키 입력을 통해 브레이커 쪽으로 당겨올수 있다.","전직 계열 스킬의 후딜레이를 캔슬하여 타이드 바운드를 시전할 수 있으며, 타이드 바운드의 후딜레이를 캔슬하여 전직 계열 스킬을 시전할 수 있다.","지상 및 공중에서 시전할 수 있다."],"special":["무적, 적 홀드"],"tags":["액티브","무적","홀드/잡기","지상/공중","후딜캔슬","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/78bd107acd474518b606be1e4fd38239.png"},{"order":26,"name":"역조연격","type":"액티브","learnLevel":"40","maxLevel":"70","adoption":"100.0","avgLevel":"38.8","groupTitle":"40렙제 스킬","groupKey":"40렙제","extra":["무색 큐브 조각 소모 1개"],"description":["두 번의 연격 후, 강렬한 피니쉬 올려베기를 시전한다."],"special":[],"tags":["액티브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/d085127b0edd719782bd618d5688f4a1.png"},{"order":27,"name":"웨이브 브레이커","type":"액티브","learnLevel":"45","maxLevel":"70","adoption":"98.9","avgLevel":"23.9","groupTitle":"40렙제 스킬","groupKey":"40렙제","extra":["무색 큐브 조각 소모 2개"],"description":["바닥에 앵커를 깊숙히 박아넣은 후, 모든 힘을 끌어모은 베기를 통해 강렬한 충격파를 발생시킨다.","전직 계열 스킬의 후딜레이를 캔슬하여 웨이브 브레이커를 시전할 수 있으며, 웨이브 브레이커의 후딜레이를 캔슬하여 전직 계열 스킬을 시전할 수 있다."],"special":["무적","타 스킬 후딜레이를 캔슬하여 스킬 시전 가능","후딜레이를 캔슬하여 타 스킬 시전 가능"],"tags":["액티브","무적","후딜캔슬","모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/42c82812f86ff6704ae9952a2e6093a4.png"},{"order":28,"name":"골칫거리","type":"패시브","learnLevel":"48","maxLevel":"50","adoption":"100.0","avgLevel":"25.0","groupTitle":"50렙제 스킬","groupKey":"50렙제","extra":[],"description":["브레이커를 힘으로 멈춰 세우기란 불가능에 가깝다. 그렇다고 말로 해서 멈춰 세워지는 것도 아니지만...","기본 공격 및 전직 계열 스킬의 공격력이 증가하고, 일부 스킬의 시전 중 받는 데미지가 추가 감소한다.","[대상 스킬]","캐넌 킥, 러프 보딩, 앵커 킥, 피어스 임팩트, 드레드폴 배러지"],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/3d8f3d438405d79f8d3ed68072674d1e.png"},{"order":29,"name":"개전의 팡파르","type":"액티브","learnLevel":"50","maxLevel":"50","adoption":"100.0","avgLevel":"15.0","groupTitle":"50렙제 스킬","groupKey":"50렙제","extra":["무색 큐브 조각 소모 5개"],"description":["함선의 선수를 체인으로 묶어 크게 휘두른 후 내려친다. 화려한 폭발과 함께 개전을 알리는 팡파르를 울린다."],"special":["무적"],"tags":["액티브","무적"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/ade01c1d6afc8a05055225045e89fe49.png"},{"order":30,"name":"피어스 임팩트","type":"액티브","learnLevel":"60","maxLevel":"50","adoption":"99.4","avgLevel":"30.7","groupTitle":"60렙제 스킬","groupKey":"60렙제","extra":["무색 큐브 조각 소모 1개"],"description":["막을 수 없는 기세를 담아, 강렬한 찌르기 공격을 가한다.","러프 보딩 시전 중에 캔슬하여 사용할 수 있다. 타격 된 적들은 브레이커의 전방으로 끌려온다.","시전 중 받는 데미지가 감소한다."],"special":["적 모으기"],"tags":["액티브","후딜캔슬","모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/ff171dc487807bb9aa28900ca9a46b41.png"},{"order":31,"name":"철의 노래","type":"패시브","learnLevel":"75","maxLevel":"50","adoption":"100.0","avgLevel":"16.0","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":[],"description":["공포스럽게도 우아한 세이렌의 전설이 제국 안팎으로 널리 퍼져나간다.","세이렌의 기본 공격 및 전직 계열 스킬의 공격력이 증가한다."],"special":[],"tags":["패시브"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/506e7ed77d517419a6e1c437a2cedb17.png"},{"order":32,"name":"마엘스트롬","type":"액티브","learnLevel":"70","maxLevel":"50","adoption":"100.0","avgLevel":"25.9","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":["무색 큐브 조각 소모 2개"],"description":["앵커를 소용돌이처럼 휘둘러 적들을 끌어모은 후, 강렬한 피니쉬 베기를 시전한다."],"special":["적 모으기"],"tags":["액티브","재입력","모으기"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/547ab2b2bd860d3e37355a9cfbc1077c.png"},{"order":33,"name":"드레드폴 배러지","type":"액티브","learnLevel":"75","maxLevel":"50","adoption":"100.0","avgLevel":"23.0","groupTitle":"70렙제 스킬","groupKey":"70렙제","extra":["무색 큐브 조각 소모 3개"],"description":["제국의 포탄이 되어 높이 발사된 후, 강렬한 강습과 이어지는 앵커 타격으로 목적지 근방의 적들을 분쇄한다.","방향 키 입력을 통해 강습 위치를 지정할 수 있으며, 방향 키 입력 중에는 받는 데미지가 감소한다."],"special":["일부 무적","방향 키 입력으로 강습 위치 지정 가능"],"tags":["액티브","일부 무적","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/a5fa08f5d509e6ff2ebc68856a470b5a.png"},{"order":34,"name":"교룡아","type":"액티브","learnLevel":"80","maxLevel":"50","adoption":"100.0","avgLevel":"21.0","groupTitle":"80렙제 스킬","groupKey":"80렙제","extra":["무색 큐브 조각 소모 5개"],"description":["전방으로 전진하며, 갑판 위의 적들을 통째로 갈아버리는 강렬한 회전 베기 공격을 가한다.","앞 방향 키 입력을 통해 전진 거리를 증가시킬 수 있다."],"special":["앞 방향키 입력을 통해 전진 거리 증가 가능"],"tags":["액티브","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/5dc7008b12a459325b548b0715c6b73c.png"},{"order":35,"name":"씨 베인","type":"액티브","learnLevel":"85","maxLevel":"50","adoption":"100.0","avgLevel":"7.0","groupTitle":"80렙제 스킬","groupKey":"80렙제","extra":["무색 큐브 조각 소모 10개"],"description":["정직하게 날아가는 것만이 세이렌의 모든 전투 방식은 아니다. 상대 함선 밑으로 잠수해 들어간 세이렌이 함선을 박살내며 솟구쳐 오른 후, 모든 것을 수장시키는 피니쉬 베기를 시전한다.","스킬 키 지속 입력을 통해 잠수 상태를 유지할 수 있으며, 잠수 중 앞/뒤 방향키를 통해 피니쉬를 시전할 위치로 이동할 수 있다.","잠수 상태 도중 해신낙연 스킬 사용 시 두 스킬을 합체 시전할 수 있으며, 이 때는 두 스킬의 공격력이 합산하여 적용된다."],"special":["무적","스킬 키 재입력을 통해 피니쉬 베기 시전 가능","잠수 중 해신낙연 스킬 합체 시전 가능"],"tags":["액티브","무적","재입력","지속입력","전진/이동","합체시전"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/8ee0099656df08a0b39225f8a21d514b.png"},{"order":36,"name":"역조","type":"패시브","learnLevel":"95","maxLevel":"50","adoption":"100.0","avgLevel":"9.0","groupTitle":"90렙제 스킬","groupKey":"90렙제","extra":[],"description":["통상 바람의 방향이 곧 파도의 방향을 결정하는 법이다. 그러나 파도가 의지를 가진다면, 그조차 거슬러 갈 수 있을 것이었다.","眞 브레이커의 기본 공격 및 전직 계열 스킬의 공격력이 증가한다. 또한 훅 샷과 타이드 바운드를 다운 상태에서 사용 가능하도록 변경되며, 일부 스킬이 강화된다.","[선체 파괴]","타격된 지점을 중심으로 충격파가 생성되는 기능이 추가된다.","[타이드 피어서]","시전 이펙트가 변경되고, 시전 중 받는 데미지가 감소한다."],"special":[],"tags":["패시브","역조강화"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/9bff7f2559e003766fee2853dca00631.png"},{"order":37,"name":"언바운드 템페스트","type":"액티브","learnLevel":"95","maxLevel":"50","adoption":"100.0","avgLevel":"13.0","groupTitle":"90렙제 스킬","groupKey":"90렙제","extra":["무색 큐브 조각 소모 7개"],"description":["멈출 수 없는 거센 폭풍이 되어, 연속된 베기 공격으로 주변의 모든 적을 쓸어버린다.","스킬 키 및 공격 키 재입력을 통해 각 베기의 후딜레이를 캔슬할 수 있으며, 베기 시전 시 입력중인 방향키의 방향으로 이동하며 스킬을 시전한다.","또한 전직 계열 스킬의 후딜레이를 캔슬하여 언바운드 템페스트를 시전할 수 있으며, 언바운드 템페스트의 후딜레이를 캔슬하여 전직 계열 스킬을 시전할 수 있다."],"special":["무적","각 베기 동작의 후딜레이 캔슬 가능","타 스킬 후딜레이를 캔슬하여 스킬 시전 가능","후딜레이를 캔슬하여 타 스킬 시전 가능"],"tags":["액티브","무적","재입력","후딜캔슬","전진/이동"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/da6e37c1e3f0e8867f70007d89c239ff.png"},{"order":38,"name":"해신낙연","type":"액티브","learnLevel":"100","maxLevel":"50","adoption":"100.0","avgLevel":"5.0","groupTitle":"100렙제 스킬","groupKey":"100렙제","extra":["무색 큐브 조각 소모 15개"],"description":["활공하는 바다의 신이 혈혈단신으로 적의 함대를 분쇄한다. 피습된 전함들은 眞 브레이커의 체인에 줄줄이 휘감겨 올라와, 곧 화려한 연쇄 폭발을 일으킨다.","씨 베인의 잠수 상태를 캔슬하고 해신낙연 스킬을 합체 시전할 수 있다."],"special":["무적","씨 베인 잠수 중 캔슬하여 해신낙연 스킬 합체 시전 가능"],"tags":["액티브","무적","후딜캔슬","합체시전"],"iconUrl":"https://dfmax.xyz/_ipx/_/image/%EC%8A%A4%ED%82%AC/%EC%A0%9C%EA%B5%AD%EA%B8%B0%EC%82%AC/a6c8f69107f8c4f5d1a0c7a57d000290.png"}],"groups":[{"title":"공용 스킬","key":"공용","range":"1~6번"},{"title":"1렙제 스킬","key":"1렙제","range":"7~12번"},{"title":"10렙제 스킬","key":"10렙제","range":"13~17번"},{"title":"20렙제 스킬","key":"20렙제","range":"18~20번"},{"title":"30렙제 스킬","key":"30렙제","range":"21~25번"},{"title":"40렙제 스킬","key":"40렙제","range":"26~27번"},{"title":"50렙제 스킬","key":"50렙제","range":"28~29번"},{"title":"60렙제 스킬","key":"60렙제","range":"30번"},{"title":"70렙제 스킬","key":"70렙제","range":"31~33번"},{"title":"80렙제 스킬","key":"80렙제","range":"34~35번"},{"title":"90렙제 스킬","key":"90렙제","range":"36~37번"},{"title":"100렙제 스킬","key":"100렙제","range":"38번"}],"tags":["액티브","패시브","무적","일부 무적","홀드/잡기","지상/공중","재입력","지속입력","후딜캔슬","전진/이동","모션없이시전","모으기","역조강화","합체시전"]}};
+
+// GitHub Pages 포트폴리오 배포용 기본 프리셋 저장소입니다.
+// 네가 로컬 브라우저에서 만든 프리셋 JSON을 나중에 이 배열 안에 넣으면,
+// 면접관이 처음 접속했을 때 저장된 프리셋처럼 자동으로 표시됩니다.
+const PORTFOLIO_PRESETS = {
+  infighter: [],
+  breaker: []
+};
+function clonePresetData(data){ return JSON.parse(JSON.stringify(data || [])); }
+let currentJobKey = localStorage.getItem('dnfSkillCurrentJob') || 'infighter';
+if(!JOBS[currentJobKey]) currentJobKey='infighter';
+let skills=[];
+let groups=[];
+let allTags=[];
+let skillByOrder=new Map();
+let activeGroup = 'all'; let activeTag = 'all';
+const content = document.getElementById('content'); const groupChips = document.getElementById('groupChips'); const tagChips = document.getElementById('tagChips'); const search = document.getElementById('search');
+
+function currentJob(){ return JOBS[currentJobKey] || JOBS.infighter; }
+function currentStorageKey(){ return currentJob().storageKey; }
+function updateJobHeader(){
+  const job=currentJob();
+  document.getElementById('jobLabel').textContent=job.label;
+  document.getElementById('statSkillCount').textContent=String(skills.length);
+  document.getElementById('statGroupCount').textContent=String(groups.length);
+  document.querySelectorAll('[data-job-option]').forEach(btn=>btn.classList.toggle('active', btn.dataset.jobOption===currentJobKey));
+  document.title=`${job.label} 스킬 도감 & 콤보 프리셋`;
+}
+function bindJobSelector(){
+  const btn=document.getElementById('jobSelectBtn');
+  const menu=document.getElementById('jobMenu');
+  btn.addEventListener('click', e=>{ e.stopPropagation(); menu.classList.toggle('open'); });
+  menu.addEventListener('click', e=>{
+    const opt=e.target.closest('[data-job-option]');
+    if(!opt) return;
+    e.stopPropagation();
+    const next=opt.dataset.jobOption;
+    menu.classList.remove('open');
+    if(next && next!==currentJobKey) applyJobData(next, true);
+  });
+  document.addEventListener('click', e=>{ if(!e.target.closest('.job-title-wrap')) menu.classList.remove('open'); });
+}
+function applyJobData(nextKey=currentJobKey, resetEditor=true){
+  if(!JOBS[nextKey]) nextKey='infighter';
+  currentJobKey=nextKey;
+  localStorage.setItem('dnfSkillCurrentJob', currentJobKey);
+  const job=currentJob();
+  skills=job.skills;
+  groups=job.groups;
+  allTags=job.tags;
+  skillByOrder=new Map(skills.map(s=>[s.order,s]));
+  activeGroup='all';
+  activeTag='all';
+  if(typeof selectedComboTags!=='undefined') selectedComboTags.clear();
+  savedPresets=loadPresets();
+  expandedPresets=new Set();
+  if(resetEditor){ comboItems=[]; bars=[]; editingPresetId=null; editingKeyId=null; editingKeyBuffer=[]; barDeleteMode=false; editingBarId=null; hideTooltip(); }
+  updateJobHeader();
+  renderChips();
+  renderCatalog();
+  applyCatalogFilters();
+  renderTagMenu();
+  updateTagFilterLabel();
+  renderPalette();
+  renderCombo();
+  renderPresetList();
+}
+function escapeHtml(str){return String(str ?? '').replace(/[&<>"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));}
+function lineClass(line){ if(line.startsWith('-')) return 'line bullet'; if(/^\[.+\]$/.test(line)) return 'line bracket'; return 'line'; }
+function renderLines(lines){ if(!lines || !lines.length) return '<div class="line empty">없음</div>'; return lines.map(line => `<div class="${lineClass(line)}">${escapeHtml(line)}</div>`).join(''); }
+function renderSkill(s){ const text=[s.name,s.type,s.groupTitle,s.learnLevel,s.maxLevel,s.adoption,s.avgLevel,...(s.tags||[]),...(s.description||[]),...(s.special||[])].join(' ').toLowerCase(); return `<article class="card" data-group="${s.groupKey}" data-tags="${escapeHtml((s.tags||[]).join('|'))}" data-text="${escapeHtml(text)}"><div class="card-head"><div class="head-left"><img class="skill-icon" src="${escapeHtml(s.iconUrl)}" alt="${escapeHtml(s.name)} 아이콘" loading="lazy"><div class="title-wrap"><div class="name"><span class="num">#${s.order}</span>${escapeHtml(s.name)} <span class="badge ${s.type==='패시브'?'passive':''}">${escapeHtml(s.type)}</span></div><div class="meta"><span>${escapeHtml(s.groupTitle)}</span><span>습득 레벨 ${escapeHtml(s.learnLevel)}</span><span>최대 레벨 ${escapeHtml(s.maxLevel)}</span>${s.extra && s.extra.length ? `<span>${escapeHtml(s.extra.join(' · '))}</span>` : ''}</div></div></div><div class="rate"><div>채택률 <b>${escapeHtml(s.adoption)}</b></div><div>평균Lv <b>${escapeHtml(s.avgLevel)}</b></div></div></div><div class="card-body"><div class="tagline">${(s.tags||[]).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div><div class="section-block"><div class="section-title">[스킬 설명]</div><div class="lines">${renderLines(s.description)}</div></div><div class="section-block"><div class="section-title">[특수 기능]</div><div class="lines">${renderLines(s.special)}</div></div></div></article>`; }
+function renderCatalog(){ content.innerHTML = groups.map(g => { const list=skills.filter(s=>s.groupKey===g.key); return `<section class="group" data-group-section="${g.key}"><div class="group-title"><h2>${escapeHtml(g.title)}</h2><span>${escapeHtml(g.range)} · ${list.length}개</span></div><div class="cards">${list.map(renderSkill).join('')}</div></section>`; }).join('') + '<div class="no-result" id="noResult">검색/필터 조건에 맞는 스킬이 없습니다.</div>'; }
+function renderChips(){ groupChips.innerHTML = `<span class="chip active" data-group-chip="all">전체</span>` + groups.map(g => `<span class="chip" data-group-chip="${g.key}">${escapeHtml(g.title)}</span>`).join(''); tagChips.innerHTML = `<span class="chip active" data-tag-chip="all">전체</span>` + allTags.map(t => `<span class="chip" data-tag-chip="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join(''); }
+function applyCatalogFilters(){ const q=search.value.trim().toLowerCase(); let visibleCount=0; document.querySelectorAll('.card').forEach(card => { const matchGroup=activeGroup==='all'||card.dataset.group===activeGroup; const tags=(card.dataset.tags||'').split('|'); const matchTag=activeTag==='all'||tags.includes(activeTag); const matchText=!q||(card.dataset.text||'').includes(q); const show=matchGroup&&matchTag&&matchText; card.classList.toggle('hidden', !show); if(show) visibleCount++; }); document.querySelectorAll('[data-group-section]').forEach(section => { const any=[...section.querySelectorAll('.card')].some(c=>!c.classList.contains('hidden')); section.style.display=any?'':'none'; }); document.getElementById('noResult').style.display=visibleCount?'none':'block'; }
+document.addEventListener('click', e => { const gc=e.target.closest('[data-group-chip]'); if(gc){ activeGroup=gc.dataset.groupChip; document.querySelectorAll('[data-group-chip]').forEach(x=>x.classList.toggle('active', x===gc)); applyCatalogFilters(); } const tc=e.target.closest('[data-tag-chip]'); if(tc){ activeTag=tc.dataset.tagChip; document.querySelectorAll('[data-tag-chip]').forEach(x=>x.classList.toggle('active', x===tc)); applyCatalogFilters(); } });
+search.addEventListener('input', applyCatalogFilters); document.getElementById('reset').addEventListener('click', () => { activeGroup='all'; activeTag='all'; search.value=''; document.querySelectorAll('[data-group-chip]').forEach(x=>x.classList.toggle('active', x.dataset.groupChip==='all')); document.querySelectorAll('[data-tag-chip]').forEach(x=>x.classList.toggle('active', x.dataset.tagChip==='all')); applyCatalogFilters(); });
+// Initial rendering is handled by applyJobData at the end.
+// Mode tabs
+function switchMode(mode){ document.querySelectorAll('.mode-tab').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode)); document.getElementById('catalogMode').classList.toggle('hidden', mode!=='catalog'); document.getElementById('comboMode').classList.toggle('hidden', mode!=='combo'); }
+document.querySelectorAll('.mode-tab').forEach(btn=>btn.addEventListener('click',()=>switchMode(btn.dataset.mode)));
+// Combo preset logic
+// skillByOrder is refreshed whenever the selected job changes.
+let comboItems=[]; let bars=[]; let savedPresets=[]; let expandedPresets=new Set(); let editingPresetId=null; let editingKeyId=null; let editingKeyBuffer=[]; let barDeleteMode=false; let editingBarId=null;
+const selectedComboTags=new Set();
+const paletteList=document.getElementById('paletteList'); const comboTrack=document.getElementById('comboTrack'); const barLane=document.getElementById('barLane');
+const tooltip=document.getElementById('skillTooltip'); let tooltipItemId=null; let tooltipTimer=null; let tooltipInside=false;
+const colors=['#22d3ee','#60a5fa','#818cf8','#a78bfa','#f472b6','#fb7185','#f59e0b','#facc15','#34d399','#2dd4bf'];
+function uid(prefix='id'){return prefix+'_'+Math.random().toString(36).slice(2,9)+'_'+Date.now().toString(36);}
+function loadPresets(){
+  try{
+    const key=currentStorageKey();
+    const saved=localStorage.getItem(key);
+    if(saved!==null) return JSON.parse(saved||'[]');
+    const defaults=clonePresetData(PORTFOLIO_PRESETS[currentJobKey]||[]);
+    if(defaults.length){ localStorage.setItem(key, JSON.stringify(defaults)); }
+    return defaults;
+  }catch{return []}
+}
+function savePresetsToStorage(){localStorage.setItem(currentStorageKey(), JSON.stringify(savedPresets));}
+function keyLabelFromEvent(e){
+  const map={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',Space:'Space',' ':'Space',Shift:'Shift',Control:'Ctrl',Alt:'Alt',Meta:'Win',Tab:'Tab',Escape:'Esc'};
+  if(map[e.key]) return map[e.key];
+  if(e.key.length===1) return e.key.toUpperCase();
+  return e.key.replace('Key','').replace('Digit','');
+}
+function displayKeyBuffer(){
+  return editingKeyBuffer.length ? editingKeyBuffer.join(' + ') : '입력...';
+}
+function finishKeyEditing(){
+  const item=comboItems.find(x=>x.id===editingKeyId);
+  if(item) item.key=editingKeyBuffer.join(' + ');
+  editingKeyId=null; editingKeyBuffer=[]; renderCombo();
+}
+function cancelKeyEditing(){
+  editingKeyId=null; editingKeyBuffer=[]; renderCombo();
+}
+function renderPalette(){
+  const q=document.getElementById('comboSkillSearch').value.trim().toLowerCase();
+  const list=skills.filter(s=>{
+    const nameMatch=!q || s.name.toLowerCase().includes(q);
+    const tagMatch=[...selectedComboTags].every(t=>(s.tags||[]).includes(t));
+    return nameMatch && tagMatch;
+  });
+  paletteList.innerHTML=list.map(s=>`<div class="palette-skill" draggable="true" data-skill-order="${s.order}" title="${escapeHtml(s.name)}"><img src="${escapeHtml(s.iconUrl)}" alt="${escapeHtml(s.name)}"><small>${escapeHtml(s.name)}</small></div>`).join('') || '<div class="empty-list">조건에 맞는 스킬이 없습니다.</div>';
+}
+function renderTagMenu(){
+  const menu=document.getElementById('tagFilterMenu');
+  menu.innerHTML=allTags.map(t=>`<label class="check-row"><input type="checkbox" value="${escapeHtml(t)}" ${selectedComboTags.has(t)?'checked':''}> <span>${escapeHtml(t)}</span></label>`).join('');
+  updateTagFilterLabel();
+}
+function updateTagFilterLabel(){document.getElementById('tagFilterLabel').textContent=selectedComboTags.size ? [...selectedComboTags].join(', ') : '기능 태그 선택';}
+document.getElementById('comboSkillSearch').addEventListener('input', renderPalette);
+document.getElementById('tagFilterBtn').addEventListener('click', e=>{e.stopPropagation(); document.getElementById('tagFilterMenu').classList.toggle('open');});
+document.getElementById('tagFilterMenu').addEventListener('change', e=>{ if(e.target.matches('input[type="checkbox"]')){ if(e.target.checked) selectedComboTags.add(e.target.value); else selectedComboTags.delete(e.target.value); updateTagFilterLabel(); renderPalette(); } });
+document.addEventListener('click', e=>{ if(!e.target.closest('.tag-filter-wrap')) document.getElementById('tagFilterMenu').classList.remove('open'); });
+
+paletteList.addEventListener('dragstart', e=>{
+  const item=e.target.closest('[data-skill-order]'); if(!item) return;
+  e.dataTransfer.setData('text/plain', item.dataset.skillOrder);
+  e.dataTransfer.setData('application/x-skill-order', item.dataset.skillOrder);
+  e.dataTransfer.effectAllowed='copy';
+});
+paletteList.addEventListener('click', e=>{ const item=e.target.closest('[data-skill-order]'); if(!item) return; addSkillToCombo(Number(item.dataset.skillOrder)); });
+function clearDropHints(){ comboTrack.querySelectorAll('.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-before','drop-after')); }
+function getDropTarget(e){
+  const target=e.target.closest('.combo-item');
+  if(!target || !comboTrack.contains(target)) return {target:null, after:false};
+  const r=target.getBoundingClientRect();
+  return {target, after:e.clientX > r.left + r.width/2};
+}
+function moveComboItem(id, targetId, after=false){
+  const from=comboItems.findIndex(x=>x.id===id); if(from<0) return;
+  const [moved]=comboItems.splice(from,1);
+  let to=targetId ? comboItems.findIndex(x=>x.id===targetId) : comboItems.length;
+  if(to<0) to=comboItems.length;
+  if(after) to += 1;
+  comboItems.splice(to,0,moved);
+  renderCombo();
+}
+function insertSkillAt(order, targetId=null, after=false){
+  const s=skillByOrder.get(order); if(!s) return;
+  const item={id:uid('skill'), skillOrder:order, key:'', note:''};
+  let to=targetId ? comboItems.findIndex(x=>x.id===targetId) : comboItems.length;
+  if(to<0) to=comboItems.length;
+  if(after) to += 1;
+  comboItems.splice(to,0,item);
+  renderCombo();
+}
+comboTrack.addEventListener('dragover', e=>{
+  const isSkill=e.dataTransfer.types.includes('application/x-skill-order') || e.dataTransfer.types.includes('text/plain');
+  const isMove=e.dataTransfer.types.includes('application/x-combo-id');
+  if(!isSkill && !isMove) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect=isMove ? 'move' : 'copy';
+  clearDropHints();
+  const info=getDropTarget(e);
+  if(info.target) info.target.classList.add(info.after ? 'drop-after' : 'drop-before');
+});
+comboTrack.addEventListener('dragleave', e=>{ if(!comboTrack.contains(e.relatedTarget)) clearDropHints(); });
+comboTrack.addEventListener('drop', e=>{
+  e.preventDefault(); clearDropHints();
+  const info=getDropTarget(e);
+  const draggedId=e.dataTransfer.getData('application/x-combo-id');
+  if(draggedId){ if(info.target && info.target.dataset.comboId===draggedId) return; moveComboItem(draggedId, info.target?.dataset.comboId || null, info.after); return; }
+  const order=Number(e.dataTransfer.getData('application/x-skill-order') || e.dataTransfer.getData('text/plain'));
+  if(order) insertSkillAt(order, info.target?.dataset.comboId || null, info.after);
+});
+
+function addSkillToCombo(order){ const s=skillByOrder.get(order); if(!s) return; comboItems.push({id:uid('skill'), skillOrder:order, key:'', note:''}); renderCombo(); }
+function renderCombo(){
+  const width=Math.max(860, comboItems.length*82+120); document.getElementById('timelineInner').style.minWidth=width+'px'; barLane.style.minWidth=Math.max(860, comboItems.length*82+60)+'px'; comboTrack.style.minWidth=Math.max(860, comboItems.length*82+60)+'px';
+  comboTrack.innerHTML = comboItems.length ? comboItems.map((item,idx)=>{ const s=skillByOrder.get(item.skillOrder); return `<div class="combo-item" draggable="true" data-combo-id="${item.id}" data-index="${idx}"><div class="key-badge ${item.key?'':'empty'}" data-key-id="${item.id}">${escapeHtml(item.key||'입력키')}</div><img class="combo-skill-icon" src="${escapeHtml(s.iconUrl)}" alt="${escapeHtml(s.name)}"><span class="remove-item" data-remove-id="${item.id}">×</span></div>`; }).join('') : '<div class="empty-combo">스킬 아이콘을 이 영역으로 드래그하거나 위 목록에서 클릭해 추가하세요.</div>';
+  renderBars();
+}
+comboTrack.addEventListener('click', e=>{
+  const rm=e.target.closest('[data-remove-id]'); if(rm){ comboItems=comboItems.filter(x=>x.id!==rm.dataset.removeId); renderCombo(); return; }
+  const key=e.target.closest('[data-key-id]'); if(key){
+    const item=comboItems.find(x=>x.id===key.dataset.keyId);
+    editingKeyId=key.dataset.keyId;
+    editingKeyBuffer=item?.key ? item.key.split(' + ').filter(Boolean) : [];
+    document.querySelectorAll('.key-badge').forEach(x=>x.classList.remove('editing'));
+    key.classList.add('editing'); key.textContent=displayKeyBuffer(); hideTooltip();
+  }
+});
+document.addEventListener('mousedown', e=>{
+  if(editingKeyId && !e.target.closest('[data-key-id]')) finishKeyEditing();
+}, true);
+document.addEventListener('keydown', e=>{
+  if(editingKeyId){
+    e.preventDefault();
+    if(e.key==='Enter'){ finishKeyEditing(); return; }
+    if(e.key==='Escape'){ cancelKeyEditing(); return; }
+    if(e.key==='Backspace' || e.key==='Delete'){ editingKeyBuffer.pop(); }
+    else if(!e.repeat){
+      const label=keyLabelFromEvent(e);
+      if(label && label!=='Esc') editingKeyBuffer.push(label);
+    }
+    const badge=document.querySelector(`[data-key-id="${editingKeyId}"]`);
+    if(badge) badge.textContent=displayKeyBuffer();
+    return;
+  }
+  if(tooltip.classList.contains('open') && tooltipItemId && !e.ctrlKey && !e.altKey && !e.metaKey && !document.getElementById('saveModal').classList.contains('open')){
+    const target=e.target; if(target && (target.tagName==='INPUT' || target.tagName==='TEXTAREA')) return;
+    if(e.key.length===1 || e.key==='Enter' || e.key==='Backspace'){ startMemoTyping(e); }
+  }
+}, true);
+comboTrack.addEventListener('dragstart', e=>{ const it=e.target.closest('.combo-item'); if(!it || e.target.closest('[data-key-id]') || e.target.closest('[data-remove-id]')){ e.preventDefault(); return; } e.dataTransfer.setData('application/x-combo-id', it.dataset.comboId); e.dataTransfer.effectAllowed='move'; setTimeout(()=>it.classList.add('dragging'),0); });
+comboTrack.addEventListener('dragend', e=>{ const it=e.target.closest('.combo-item'); if(it) it.classList.remove('dragging'); clearDropHints(); });
+comboTrack.addEventListener('mouseover', e=>{
+  const img=e.target.closest('.combo-skill-icon');
+  if(!img || !comboTrack.contains(img)) return;
+  showTooltipForItem(img.closest('.combo-item'), img);
+});
+comboTrack.addEventListener('mouseout', e=>{
+  const img=e.target.closest('.combo-skill-icon');
+  if(!img || !comboTrack.contains(img)) return;
+  if(e.relatedTarget && img.contains(e.relatedTarget)) return;
+  scheduleTooltipHide();
+});
+tooltip.addEventListener('mouseenter',()=>{tooltipInside=true; clearTimeout(tooltipTimer);}); tooltip.addEventListener('mouseleave',()=>{tooltipInside=false; scheduleTooltipHide();});
+function tagClass(t){ if(t==='어그레시브') return 'aggressive'; if(t==='전진/이동') return 'move'; return ''; }
+function showTooltipForItem(el, imgEl=el){ clearTimeout(tooltipTimer); const id=el.dataset.comboId; const item=comboItems.find(x=>x.id===id); if(!item) return; const s=skillByOrder.get(item.skillOrder); if(!s) return; tooltipItemId=id; const note=item.note||''; tooltip.innerHTML=`<div class="tooltip-title">${escapeHtml(s.name)}</div><div class="tooltip-tags">${(s.tags||[]).map(t=>`<span class="tooltip-tag ${tagClass(t)}">${escapeHtml(t)}</span>`).join('')}</div><div class="memo-placeholder" id="memoPlaceholder">${note ? '메모를 수정하려면 키보드 입력을 시작하세요.' : '키보드 입력시 메모를 시작합니다'}</div><textarea class="memo-area ${note?'open':''}" id="memoArea">${escapeHtml(note)}</textarea>`;
+  tooltip.classList.add('open');
+  const r=(imgEl||el).getBoundingClientRect();
+  const gap=12;
+  const tw=tooltip.offsetWidth || 320;
+  let left=r.left + (r.width/2) - (tw/2);
+  left=Math.max(12, Math.min(window.innerWidth-tw-12, left));
+  const top=r.bottom + gap;
+  tooltip.style.top=top+'px'; tooltip.style.left=left+'px';
+  const maxH=Math.max(120, window.innerHeight - top - 12);
+  tooltip.style.maxHeight=maxH+'px'; tooltip.style.overflow='auto';
+  const area=tooltip.querySelector('#memoArea'); area.addEventListener('input',()=>{ const obj=comboItems.find(x=>x.id===tooltipItemId); if(obj) obj.note=area.value; });
+}
+function scheduleTooltipHide(){ clearTimeout(tooltipTimer); tooltipTimer=setTimeout(()=>{ if(!tooltipInside) hideTooltip(); }, 160); }
+function hideTooltip(){ tooltip.classList.remove('open'); tooltipItemId=null; }
+function startMemoTyping(e){
+  const area=tooltip.querySelector('#memoArea'); const placeholder=tooltip.querySelector('#memoPlaceholder'); if(!area) return; e.preventDefault(); area.classList.add('open'); if(placeholder) placeholder.style.display='none'; area.focus();
+  if(e.key==='Backspace'){ area.value=area.value.slice(0,-1); } else if(e.key==='Enter'){ area.value += '\\n'; } else if(e.key.length===1){ area.value += e.key; }
+  const obj=comboItems.find(x=>x.id===tooltipItemId); if(obj) obj.note=area.value;
+}
+// Bars
+function renderColorGrid(){ document.getElementById('colorGrid').innerHTML=colors.map(c=>`<div class="color-swatch" data-color="${c}" style="background:${c}"></div>`).join(''); }
+function getIconSlots(){
+  const laneRect=barLane.getBoundingClientRect();
+  return Array.from(comboTrack.querySelectorAll('.combo-item')).map(el=>{
+    const img=el.querySelector('.combo-skill-icon');
+    const r=(img||el).getBoundingClientRect();
+    return {left:Math.max(0, r.left-laneRect.left), right:Math.max(0, r.right-laneRect.left)};
+  }).filter(x=>x.right>x.left);
+}
+function nearestValue(v, arr){ if(!arr.length) return Math.max(0, Math.round(v/82)*82); return arr.reduce((best,n)=>Math.abs(n-v)<Math.abs(best-v)?n:best, arr[0]); }
+function snapBarBounds(left,width){
+  const slots=getIconSlots();
+  const max=barLane.scrollWidth-20;
+  if(!slots.length){
+    const l=Math.max(0,Math.min(max-40,Math.round(left/82)*82));
+    const r=Math.max(l+40,Math.min(max,Math.round((left+width)/82)*82));
+    return {left:l,width:r-l};
+  }
+  const lefts=slots.map(s=>s.left);
+  const rights=slots.map(s=>s.right);
+  let l=nearestValue(left,lefts);
+  let r=nearestValue(left+width,rights);
+  if(r<=l){
+    const idx=lefts.indexOf(l);
+    const fallback=slots[Math.min(slots.length-1,Math.max(0,idx))];
+    r=fallback.right;
+    if(r<=l){ r=nearestValue(l+60,rights.filter(x=>x>l)); }
+  }
+  r=Math.max(r,l+40);
+  return {left:Math.max(0,l), width:Math.min(max-l, r-l)};
+}
+function defaultBarBounds(){
+  const slots=getIconSlots();
+  if(slots.length){
+    const first=slots[0];
+    const last=slots[Math.min(slots.length-1,2)];
+    return {left:first.left, width:last.right-first.left};
+  }
+  return {left:0,width:246};
+}
+document.getElementById('addBarBtn').addEventListener('click', e=>{e.stopPropagation(); barDeleteMode=false; updateBarDeleteMode(); document.getElementById('colorPop').classList.toggle('open');});
+document.getElementById('deleteBarBtn').addEventListener('click', e=>{e.stopPropagation(); barDeleteMode=!barDeleteMode; document.getElementById('colorPop').classList.remove('open'); updateBarDeleteMode();});
+function updateBarDeleteMode(){ barLane.classList.toggle('bar-delete-mode', barDeleteMode); document.getElementById('deleteBarBtn').classList.toggle('active', barDeleteMode); }
+document.getElementById('colorGrid').addEventListener('click', e=>{ const sw=e.target.closest('[data-color]'); if(!sw) return; const b=defaultBarBounds(); const id=uid('bar'); bars.push({id, left:b.left, width:b.width, color:sw.dataset.color, note:'구간 메모'}); editingBarId=id; document.getElementById('colorPop').classList.remove('open'); renderBars(); });
+document.addEventListener('click', e=>{ if(!e.target.closest('#colorPop') && !e.target.closest('#addBarBtn')) document.getElementById('colorPop').classList.remove('open'); });
+function getBarTextPlacement(bar, allBars){
+  const left=Number(bar.left)||0;
+  const width=Math.max(0, Number(bar.width)||0);
+  const right=left+width;
+  const note=bar.note||'구간 메모';
+  const baseMax=Math.max(44, width-18);
+  const defaultPlace={center:width/2, maxWidth:baseMax, inputWidth:Math.max(72, Math.min(190, baseMax)), floating:false};
+  if(!width) return defaultPlace;
+
+  // 같은 lane 안에서 나중에 렌더링된 막대가 위에 보이므로,
+  // 현재 막대보다 위 레이어에 있는 막대만 텍스트를 가릴 수 있는 대상으로 본다.
+  const list=Array.isArray(allBars)?allBars:[];
+  const selfIndex=list.findIndex(x=>x && x.id===bar.id);
+  const blockers=list.filter((other,idx)=>{
+    if(!other || other.id===bar.id) return false;
+    if(selfIndex>=0 && idx<=selfIndex) return false;
+    const ol=Number(other.left)||0;
+    const or=ol+Math.max(0, Number(other.width)||0);
+    return or>left && ol<right;
+  });
+
+  if(!blockers.length) return defaultPlace;
+
+  const pad=16;
+  const gap=4;
+  const minReadable=36;
+  const estimatedTextWidth=Math.min(baseMax, Math.max(32, note.length*11+22));
+
+  // 현재 막대보다 위에 있는 막대가 조금이라도 겹치면,
+  // 텍스트가 아직 직접 가려지지 않았더라도 실제로 보이는 남은 구간을 기준으로 다시 가운데 정렬한다.
+  let intervals = width > pad*2 ? [{l:left+pad, r:right-pad}] : [{l:left, r:right}];
+  blockers.forEach(other=>{
+    const ol=Number(other.left)||0;
+    const or=ol+Math.max(0, Number(other.width)||0);
+    const cutL=Math.max(left, ol-gap);
+    const cutR=Math.min(right, or+gap);
+    if(cutR<=cutL) return;
+    intervals=intervals.flatMap(seg=>{
+      const l=Math.max(seg.l, cutL);
+      const r=Math.min(seg.r, cutR);
+      if(r<=l) return [seg];
+      const parts=[];
+      if(seg.l<l) parts.push({l:seg.l, r:l});
+      if(r<seg.r) parts.push({l:r, r:seg.r});
+      return parts;
+    });
+  });
+  intervals=intervals.filter(seg=>seg.r-seg.l>=minReadable);
+
+  if(!intervals.length){
+    // 막대 안에 읽을 만한 안전 구간이 없을 때만 위로 띄운다.
+    return {center:width/2, maxWidth:baseMax, inputWidth:Math.max(72, Math.min(190, baseMax)), floating:true};
+  }
+
+  // 텍스트가 실제로 들어갈 수 있는 구간을 우선하고, 없으면 가장 넓은 구간에 말줄임으로 배치.
+  intervals.sort((a,b)=>{
+    const af=(a.r-a.l)>=estimatedTextWidth;
+    const bf=(b.r-b.l)>=estimatedTextWidth;
+    if(af!==bf) return af?-1:1;
+    return (b.r-b.l)-(a.r-a.l);
+  });
+  const best=intervals[0];
+  const safeWidth=Math.max(0, best.r-best.l);
+  const maxWidth=Math.max(44, Math.min(baseMax, safeWidth-8));
+  return {center:(best.l+best.r)/2-left, maxWidth, inputWidth:Math.max(72, Math.min(190, maxWidth)), floating:false};
+}
+function barTextStyle(place){
+  return `left:${Math.round(place.center)}px;max-width:${Math.round(place.maxWidth)}px;`;
+}
+function barInputStyle(place){
+  return `left:${Math.round(place.center)}px;width:${Math.round(place.inputWidth)}px;max-width:${Math.round(place.maxWidth)}px;`;
+}
+function renderBars(){
+  updateBarDeleteMode();
+  const placements=new Map(bars.map(b=>[b.id, getBarTextPlacement(b, bars)]));
+  barLane.innerHTML=bars.map(b=>{
+    const edit=editingBarId===b.id;
+    const label=escapeHtml(b.note||'구간 메모');
+    const place=placements.get(b.id)||{center:(Number(b.width)||80)/2,maxWidth:Math.max(44,(Number(b.width)||80)-18),inputWidth:120,floating:false};
+    const floatClass=place.floating?' is-floating':'';
+    const body=edit ? `<input class="bar-edit-input${floatClass}" data-bar-edit="${b.id}" value="${label}" maxlength="40" style="${barInputStyle(place)}">` : `<span class="bar-text${floatClass}" style="${barTextStyle(place)}" title="클릭하거나 더블클릭해서 구간 메모를 수정하세요">${label}</span>`;
+    return `<div class="note-bar" data-bar-id="${b.id}" style="left:${b.left}px;width:${b.width}px;background:${b.color}" title="${label}"><span class="handle left-h" data-handle="left"></span>${body}<button class="bar-delete-x" data-delete-bar="${b.id}" title="구간 메모 삭제">×</button><span class="handle right-h" data-handle="right"></span></div>`;
+  }).join('');
+  if(editingBarId){ requestAnimationFrame(()=>{ const input=barLane.querySelector(`[data-bar-edit="${editingBarId}"]`); if(input){ input.focus(); input.select(); } }); }
+}
+function startBarEdit(id){ if(barDeleteMode) return; editingBarId=id; renderBars(); }
+function commitBarEdit(input){ const id=input?.dataset?.barEdit; if(!id) return; const b=bars.find(x=>x.id===id); if(b) b.note=(input.value||'').trim()||'구간 메모'; editingBarId=null; renderBars(); }
+let barDrag=null;
+barLane.addEventListener('click', e=>{ const del=e.target.closest('[data-delete-bar]'); if(del){ e.stopPropagation(); bars=bars.filter(b=>b.id!==del.dataset.deleteBar); if(editingBarId===del.dataset.deleteBar) editingBarId=null; renderBars(); return; } const txt=e.target.closest('.bar-text'); if(txt && !barDeleteMode){ e.stopPropagation(); startBarEdit(txt.closest('.note-bar').dataset.barId); } });
+barLane.addEventListener('keydown', e=>{ const input=e.target.closest('.bar-edit-input'); if(!input) return; if(e.key==='Enter'){ e.preventDefault(); commitBarEdit(input); } if(e.key==='Escape'){ e.preventDefault(); editingBarId=null; renderBars(); } });
+barLane.addEventListener('focusout', e=>{ const input=e.target.closest('.bar-edit-input'); if(!input) return; setTimeout(()=>{ if(editingBarId===input.dataset.barEdit) commitBarEdit(input); }, 0); });
+barLane.addEventListener('mousedown', e=>{ if(barDeleteMode || e.target.closest('.bar-edit-input') || e.target.closest('.bar-text')) return; const bar=e.target.closest('.note-bar'); if(!bar) return; const b=bars.find(x=>x.id===bar.dataset.barId); if(!b) return; const handle=e.target.dataset.handle||'move'; barDrag={id:b.id,mode:handle,startX:e.clientX,startLeft:b.left,startWidth:b.width}; e.preventDefault(); });
+document.addEventListener('mousemove', e=>{ if(!barDrag) return; const b=bars.find(x=>x.id===barDrag.id); if(!b) return; const dx=e.clientX-barDrag.startX; const startRight=barDrag.startLeft+barDrag.startWidth; let next;
+  if(barDrag.mode==='move') next=snapBarBounds(barDrag.startLeft+dx, barDrag.startWidth);
+  else if(barDrag.mode==='left') next=snapBarBounds(barDrag.startLeft+dx, startRight-(barDrag.startLeft+dx));
+  else if(barDrag.mode==='right') next=snapBarBounds(barDrag.startLeft, barDrag.startWidth+dx);
+  if(next){ b.left=next.left; b.width=next.width; renderBars(); }
+});
+document.addEventListener('mouseup',()=>{ if(barDrag){ const b=bars.find(x=>x.id===barDrag.id); if(b){ const next=snapBarBounds(b.left,b.width); b.left=next.left; b.width=next.width; renderBars(); } } barDrag=null; });
+barLane.addEventListener('dblclick', e=>{ if(barDeleteMode || e.target.closest('.bar-edit-input')) return; const bar=e.target.closest('.note-bar'); if(!bar) return; e.stopPropagation(); startBarEdit(bar.dataset.barId); });
+// Save modal and presets
+const saveModal=document.getElementById('saveModal');
+document.getElementById('openSaveModal').addEventListener('click',()=>{ const existing=editingPresetId ? savedPresets.find(p=>p.id===editingPresetId) : null; document.getElementById('presetNameInput').value=existing?.name||''; document.getElementById('skillCodeInput').value=existing?.skillCode||''; saveModal.classList.add('open'); });
+document.getElementById('closeSaveModal').addEventListener('click',()=>saveModal.classList.remove('open'));
+saveModal.addEventListener('click', e=>{ if(e.target===saveModal) saveModal.classList.remove('open'); });
+document.getElementById('savePresetBtn').addEventListener('click',()=>{
+  const name=document.getElementById('presetNameInput').value.trim(); const skillCode=document.getElementById('skillCodeInput').value.trim();
+  if(!name){alert('프리셋 이름을 입력해주세요.');return;}
+  const data={id:editingPresetId||uid('preset'),name,skillCode,items:comboItems,bars,updatedAt:new Date().toISOString()};
+  const idx=savedPresets.findIndex(p=>p.id===data.id); if(idx>=0) savedPresets[idx]=data; else savedPresets.unshift(data);
+  savePresetsToStorage(); renderPresetList(); saveModal.classList.remove('open'); editingPresetId=data.id;
+});
+function renderSavedSkillMini(it){
+  const s=skillByOrder.get(it.skillOrder);
+  if(!s) return '';
+  return `<div class="mini"><span class="mini-key">${escapeHtml(it.key||'')}</span><img class="saved-skill-icon" data-skill-order="${it.skillOrder}" data-note="${escapeHtml(it.note||'')}" src="${escapeHtml(s.iconUrl)}" title="${escapeHtml(s.name)}" alt="${escapeHtml(s.name)}"></div>`;
+}
+function renderPresetDetail(p){
+  const items=p.items||[];
+  const width=Math.max(860, items.length*82+120);
+  const savedBars=p.bars||[];
+  const barHtml=savedBars.map(b=>{ const place=getBarTextPlacement(b, savedBars); const label=escapeHtml(b.note||'구간 메모'); const floatClass=place.floating?' is-floating':''; return `<div class="saved-note-bar" style="left:${Number(b.left)||0}px;width:${Number(b.width)||80}px;background:${escapeHtml(b.color||'#22d3ee')}" title="${label}"><span class="saved-note-text${floatClass}" style="${barTextStyle(place)}">${label}</span></div>`; }).join('');
+  const itemHtml=items.map(it=>{ const s=skillByOrder.get(it.skillOrder); if(!s) return ''; return `<div class="preset-detail-item"><div class="preset-detail-key">${escapeHtml(it.key||'입력키')}</div><img class="saved-skill-icon" data-skill-order="${it.skillOrder}" data-note="${escapeHtml(it.note||'')}" src="${escapeHtml(s.iconUrl)}" alt="${escapeHtml(s.name)}" title="${escapeHtml(s.name)}"></div>`; }).join('');
+  return `<div class="preset-detail"><div class="preset-detail-shell"><div class="preset-detail-inner" style="min-width:${width}px"><div class="preset-detail-bars" style="min-width:${Math.max(820,width-40)}px">${barHtml}</div><div class="preset-detail-track" style="min-width:${Math.max(820,width-40)}px">${itemHtml}</div></div></div></div>`;
+}
+function renderPresetList(){
+  const root=document.getElementById('presetList');
+  if(!savedPresets.length){ root.innerHTML='<div class="empty-list">아직 저장된 프리셋이 없습니다.</div>'; return; }
+  root.innerHTML=savedPresets.map(p=>{
+    const expanded=expandedPresets.has(p.id);
+    const preview=(p.items||[]).map(renderSavedSkillMini).join('');
+    return `<article class="preset-card ${expanded?'expanded':''}" data-preset-id="${p.id}"><div class="preset-head"><div><div class="preset-name">${escapeHtml(p.name)}</div><div class="meta"><span>스킬 ${p.items?.length||0}개</span><span>구간 메모 ${p.bars?.length||0}개</span></div></div></div>${expanded ? '' : `<div class="preset-preview">${preview || '<div class="empty-list">스킬이 없습니다.</div>'}</div>`}${p.skillCode?`<div class="preset-code"><b>불러온 스킬 코드</b><br>${escapeHtml(p.skillCode)}</div>`:''}${expanded?renderPresetDetail(p):''}<div class="preset-actions"><button class="detail-btn" data-detail-preset="${p.id}">${expanded?'간단히 보기':'자세히 보기'}</button><button data-edit-preset="${p.id}">수정</button><button class="delete-btn" data-delete-preset="${p.id}">삭제</button></div></article>`;
+  }).join('');
+}
+function showTooltipForSavedIcon(img){
+  const order=Number(img.dataset.skillOrder); const s=skillByOrder.get(order); if(!s) return;
+  const note=img.dataset.note || '';
+  tooltipItemId=null; clearTimeout(tooltipTimer);
+  tooltip.innerHTML=`<div class="tooltip-title">${escapeHtml(s.name)}</div><div class="tooltip-tags">${(s.tags||[]).map(t=>`<span class="tooltip-tag ${tagClass(t)}">${escapeHtml(t)}</span>`).join('')}</div>${note?`<div class="memo-placeholder">저장된 메모</div><div class="saved-memo">${escapeHtml(note)}</div>`:`<div class="memo-placeholder">저장된 메모 없음</div>`}`;
+  tooltip.classList.add('open');
+  const r=img.getBoundingClientRect();
+  const gap=12; const tw=tooltip.offsetWidth || 320;
+  let left=r.left + (r.width/2) - (tw/2);
+  left=Math.max(12, Math.min(window.innerWidth-tw-12, left));
+  const top=r.bottom + gap;
+  tooltip.style.top=top+'px'; tooltip.style.left=left+'px';
+  tooltip.style.maxHeight=Math.max(120, window.innerHeight-top-12)+'px'; tooltip.style.overflow='auto';
+}
+const presetListEl=document.getElementById('presetList');
+presetListEl.addEventListener('click', e=>{
+  const detail=e.target.closest('[data-detail-preset]'); const edit=e.target.closest('[data-edit-preset]'); const del=e.target.closest('[data-delete-preset]');
+  if(detail){ const id=detail.dataset.detailPreset; if(expandedPresets.has(id)) expandedPresets.delete(id); else expandedPresets.add(id); renderPresetList(); return; }
+  if(edit){ const p=savedPresets.find(x=>x.id===edit.dataset.editPreset); if(!p) return; comboItems=JSON.parse(JSON.stringify(p.items||[])); bars=JSON.parse(JSON.stringify(p.bars||[])); editingPresetId=p.id; renderCombo(); window.scrollTo({top:document.getElementById('comboMode').offsetTop, behavior:'smooth'}); return; }
+  if(del){ const p=savedPresets.find(x=>x.id===del.dataset.deletePreset); if(!p) return; if(confirm(`'${p.name}' 프리셋을 삭제할까요?`)){ savedPresets=savedPresets.filter(x=>x.id!==p.id); expandedPresets.delete(p.id); if(editingPresetId===p.id) editingPresetId=null; savePresetsToStorage(); renderPresetList(); } }
+});
+presetListEl.addEventListener('mouseover', e=>{ const img=e.target.closest('.saved-skill-icon'); if(!img || !presetListEl.contains(img)) return; showTooltipForSavedIcon(img); });
+presetListEl.addEventListener('mouseout', e=>{ const img=e.target.closest('.saved-skill-icon'); if(!img || !presetListEl.contains(img)) return; scheduleTooltipHide(); });
+document.getElementById('clearCombo').addEventListener('click',()=>{ if(confirm('현재 제작 중인 콤보를 비울까요?')){ comboItems=[]; bars=[]; editingPresetId=null; renderCombo(); } });
+renderColorGrid(); bindJobSelector(); applyJobData(currentJobKey, false);
+</script>
+</body>
+</html>
